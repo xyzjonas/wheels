@@ -15,6 +15,9 @@ export interface FuelEntry extends Base {
   refueled: string;
 }
 
+export type SettingMeasurement = "metric" | "imperial";
+export type SettingCurrencyPosition = "before" | "after";
+
 export interface CreateFuelEntry extends Omit<FuelEntry, "id" | "created" | "updated" | "collectionId" > {}
 
 export interface Vehicle extends Base {
@@ -27,6 +30,10 @@ export interface Vehicle extends Base {
   expand?: {
     fuel_entries: FuelEntry[];
   }
+
+  setting_currency?: string;
+  setting_measurement?: SettingMeasurement;
+  setting_currency_position?: SettingCurrencyPosition;
 }
 
 export interface PbFetchError {

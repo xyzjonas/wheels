@@ -17,7 +17,7 @@
           label="Odometer *"
           lazy-rules
           class="card"
-          hint="Odometer reading"
+          :hint="`Odometer reading in ${settings.units.dist.long}`"
           :rules="[mustBeNonZero]"
         >
           <template v-slot:prepend>
@@ -31,7 +31,7 @@
           @update:model-value="amountChanged"
           type="number"
           label="Fuel Amount *"
-          hint="Total amount refueled"
+          :hint="`Total amount refueled in ${settings.currency.name}`"
           :rules="[mustBeNonZero]"
         >
           <template v-slot:prepend>
@@ -45,7 +45,7 @@
           @update:model-value="unitPriceChanged"
           type="number"
           label="Price per Unit *"
-          hint="Price for a one unit of fuel"
+          :hint="`Price for a one unit of fuel in ${settings.units.vol.long}`"
           :rules="[mustBeNonZero]"
         >
           <template v-slot:prepend>
@@ -59,7 +59,7 @@
           @update:model-value="totalPriceChanged"
           type="number"
           label="Total *"
-          hint="Total price paid"
+          :hint="`Total price paid in ${settings.currency.name}`"
           :rules="[mustBeNonZero]"
         >
           <template v-slot:prepend>
@@ -84,8 +84,11 @@
 </template>
 
 <script setup lang="ts">
+import { useVehicles } from '@/composables/vehicles';
 import type { FuelEntry } from '@/types'
+import { set } from '@vueuse/core';
 
+const { settings } = useVehicles()
 const model = defineModel<Partial<FuelEntry>>({ required: true })
 
 defineEmits(['submit', 'cancel'])

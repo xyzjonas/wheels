@@ -10,6 +10,10 @@ const selectedVehicleId = useLocalStorage<string>('selectedVehicle', '')
 const isOffline = ref(false)
 
 
+const DEFAULT_CURRENCY = "EUR"
+const DEFAULT_POSITION = "after"
+const DEFAULT_MEASUREMENT = "metric"
+
 
 export const useVehicles = () => {
   const pb = new PocketBase()
@@ -89,6 +93,91 @@ export const useVehicles = () => {
     vehicles.value.find((veh) => veh.id === selectedVehicleId.value)
   )
 
+  const currency = computed(() => selectedVehicle.value?.setting_currency ?? DEFAULT_CURRENCY)
+  const currencyPosition = computed(() => selectedVehicle.value?.setting_currency_position ?? DEFAULT_POSITION)
+  const measurement = computed(() => selectedVehicle.value?.setting_measurement ?? DEFAULT_MEASUREMENT)
+  const unitDistance = computed(() => {
+    if (measurement.value === 'imperial') {
+      return {
+        short: 'mil.',
+        long: 'miles',
+      }
+    }
+
+    return {
+      short: 'km',
+      long: 'kilometers',
+    }
+  })
+  const unitConsumption = computed(() => {
+    if (measurement.value === 'imperial') {
+      return 'mpg'
+    }
+
+    return 'l/100km'
+  })
+  const unitAmount = computed(() => {
+    if (measurement.value === 'imperial') {
+      return {
+        short: 'g',
+        long: 'gallons',
+      }
+    }
+
+    return {
+      short: 'l',
+      long: 'litres',
+    }
+  })
+
+
+  const settings = computed(() => {
+    if (measurement.value === 'imperial') {
+      return {
+        currency: {
+          name: selectedVehicle.value?.setting_currency ?? DEFAULT_CURRENCY,
+          position: selectedVehicle.value?.setting_currency_position ?? DEFAULT_POSITION,
+        },
+        units: {
+          dist: {
+            short: 'm',
+            long: 'miles',
+          },
+          vol: {
+            short: 'g',
+            long: 'gallons',
+          },
+          consumption: {
+            short: 'mpg',
+            long: 'miles per gallon',
+          }
+        }
+      }
+    }
+
+    return {
+      currency: {
+        name: selectedVehicle.value?.setting_currency ?? DEFAULT_CURRENCY,
+        position: selectedVehicle.value?.setting_currency_position ?? DEFAULT_POSITION,
+      },
+      units: {
+        dist: {
+          short: 'km',
+          long: 'kilometers',
+        },
+        vol: {
+          short: 'l',
+          long: 'litres',
+        },
+        consumption: {
+          short: 'l/100km',
+          long: 'litres per 100 km',
+        }
+      }
+    }
+  })
+
+  
   function getThumbnail(li: Vehicle) {
     return `/api/files/${li.collectionId}/${li.id}/${li.icon}?thumb=128x128`
   }
@@ -97,6 +186,12 @@ export const useVehicles = () => {
     vehicles,
     selectedVehicleId,
     selectedVehicle,
+    // currency,
+    // currencyPosition,
+    // unitAmount,
+    // unitConsumption,
+    // unitDistance,
+    settings,
     fetch,
     addFuelEntry,
     getThumbnail,

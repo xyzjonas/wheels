@@ -98,7 +98,7 @@ import { useQuasar, type QTableColumn, type QTableProps } from 'quasar'
 
 const router = useRouter()
 
-const { selectedVehicle, selectedVehicleId } = useVehicles()
+const { selectedVehicle, selectedVehicleId, settings } = useVehicles()
 
 selectedVehicleId.value = router.currentRoute.value.params.id as string
 
@@ -109,6 +109,14 @@ if (!selectedVehicle.value) {
   router.push({ name: 'vehicle-home', params: { id: selectedVehicle.value.id } })
 }
 
+const formatCurrency = (val: any) => {
+  if (settings.value.currency.position === 'before') {
+    return `${settings.value.currency.name} ${val}`
+  }
+
+  return `${val} ${settings.value.currency.name}`
+}
+
 const $q = useQuasar()
 const fuelColumns = computed<QTableColumn[]>(() => {
   const columns: QTableColumn[] = [
@@ -116,7 +124,7 @@ const fuelColumns = computed<QTableColumn[]>(() => {
       field: 'odometer',
       name: 'odometer',
       label: 'Odometer',
-      format: (val: number) => `${val} km`,
+      format: (val: number) => `${val} ${settings.value.units.dist.long}`,
       align: 'left',
       sortable: true
     },
@@ -132,7 +140,7 @@ const fuelColumns = computed<QTableColumn[]>(() => {
       field: 'amount',
       name: 'amount',
       label: 'Amount',
-      format: (val: number) => `${val} l`,
+      format: formatCurrency,
       align: 'right'
     }
   ]
@@ -142,7 +150,7 @@ const fuelColumns = computed<QTableColumn[]>(() => {
       field: 'price_per_unit',
       name: 'price_per_unit',
       label: 'Price Per Unit',
-      format: (val: number) => `${val},- Kč`,
+      format: formatCurrency,
       align: 'right'
     })
   }
@@ -151,7 +159,7 @@ const fuelColumns = computed<QTableColumn[]>(() => {
     field: 'price',
     name: 'price',
     label: 'Total Price',
-    format: (val: number) => `${val},- Kč`,
+    format: formatCurrency,
     align: 'right'
   })
 

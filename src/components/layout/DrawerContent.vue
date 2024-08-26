@@ -106,6 +106,13 @@ const listItems = computed(() => {
         click: () =>
           router.push({ name: 'vehicle-maintenance', params: { id: selectedVehicle.value?.id } }),
         active: router.currentRoute.value.name === 'vehicle-maintenance'
+      },
+      {
+        label: 'Vehicle Settings',
+        icon: 'i-hugeicons-settings-01',
+        click: () =>
+          router.push({ name: 'vehicle-edit', params: { id: selectedVehicle.value?.id } }),
+        active: router.currentRoute.value.name === 'vehicle-edit'
       }
     )
   }

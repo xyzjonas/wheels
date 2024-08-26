@@ -66,16 +66,15 @@
       </div> -->
     </q-drawer>
 
-    <q-page-container class="overflow-auto">
-      <RouterView v-slot="{ Component }">
+      <RouterView v-slot="{ Component }" class="h-full">
         <template v-if="Component">
           <Transition mode="out-in">
             <KeepAlive>
               <Suspense>
                 <!-- main content -->
-                 <div>
+                  <q-page-container class="page">
                    <component :is="Component"></component>
-                 </div>
+                </q-page-container>
                 <!-- loading state -->
                 <template #fallback> Loading... </template>
               </Suspense>
@@ -83,7 +82,7 @@
           </Transition>
         </template>
       </RouterView>
-    </q-page-container>
+
   </q-layout>
 </template>
 
@@ -141,6 +140,10 @@ const toggleRightDrawer = () => {
 </script>
 
 <style lang="css">
+
+.page {
+  min-height: 100dvh;
+}
 
 .v-enter-active,
 .v-leave-active {
