@@ -1,6 +1,5 @@
 <template>
-  <q-form @submit.prevent="$emit('submit', model)" class="p-2 h-full flex flex-col">
-
+  <q-form @submit.prevent="$emit('submit', model)" class="h-full flex flex-col gap-3">
     <q-input filled v-model="model.vin" label="VIN" hint="VIN Number">
       <template v-slot:prepend>
         <q-icon name="i-hugeicons-text-number-sign" />
@@ -16,7 +15,6 @@
     <q-input
       filled
       v-model="model.name"
-      type="number"
       label="Name"
       hint="Name it anything you like ;)"
     >
@@ -31,7 +29,36 @@
       </template>
     </q-input>
 
-    <div class="flex gap-2 mt-20">
+    <q-separator class="my-2" />
+
+    <q-input
+      filled
+      v-model="model.setting_currency"
+      label="Currency Name"
+      hint="Set an arbitrary currency label"
+    >
+      <template v-slot:prepend>
+        <q-icon name="i-hugeicons-dollar-02" />
+      </template>
+    </q-input>
+
+    <q-select
+      filled
+      v-model="model.setting_currency_position"
+      :options="['before', 'after']"
+      label="Currency position"
+      hint="Whether the currency label is put before or after the number"
+    />
+
+    <q-select
+      filled
+      v-model="model.setting_measurement"
+      :options="['metric', 'imperial']"
+      label="Measurement"
+      hint="Set this car's units to metric or imperial"
+    />
+
+    <div class="flex gap-2 mt-auto">
       <q-btn unelevated label="Submit" type="submit" color="primary" class="flex-1" />
       <q-btn @click="$emit('cancel')" label="go back" color="primary" outline class="flex-1" />
     </div>

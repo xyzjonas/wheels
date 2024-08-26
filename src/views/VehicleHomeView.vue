@@ -124,7 +124,7 @@ const fuelColumns = computed<QTableColumn[]>(() => {
       field: 'odometer',
       name: 'odometer',
       label: 'Odometer',
-      format: (val: number) => `${val} ${settings.value.units.dist.long}`,
+      format: (val: number) => `${val} ${settings.value.units.dist.short}`,
       align: 'left',
       sortable: true
     },
@@ -140,7 +140,7 @@ const fuelColumns = computed<QTableColumn[]>(() => {
       field: 'amount',
       name: 'amount',
       label: 'Amount',
-      format: formatCurrency,
+      format: (val: string) => `${val} ${settings.value.units.vol.short}`,
       align: 'right'
     }
   ]

@@ -4,10 +4,11 @@ import PocketBase from 'pocketbase'
 import type { CreateFuelEntry, FuelEntry, PbFetchError, Vehicle } from '../types'
 import { computed, ref } from 'vue'
 import { useQuasar } from 'quasar'
+import { useApi } from '@/composables/api'
 
 const vehicles = useLocalStorage<Vehicle[]>('vehicles', [])
 const selectedVehicleId = useLocalStorage<string>('selectedVehicle', '')
-const isOffline = ref(false)
+// const isOffline = ref(false)
 
 
 const DEFAULT_CURRENCY = "EUR"
@@ -18,6 +19,17 @@ const DEFAULT_MEASUREMENT = "metric"
 export const useVehicles = () => {
   const pb = new PocketBase()
   const $q = useQuasar()
+  const { errorNotify, isOffline } = useApi()
+
+
+  const updateVehicle = (newEntry: Vehicle) => {
+    vehicles.value = vehicles.value.map(old => {
+      if (old.id === newEntry.id) {
+        return newEntry
+      }
+      return old
+    })
+  }
 
   async function fetch() {
     try {
@@ -33,11 +45,23 @@ export const useVehicles = () => {
         })
       }
     } catch(err: unknown) {
-      isOffline.value = true
+      errorNotify(err)
+    }
+  }
+
+  async function editVehicle(vehicleId: string, entry: Partial<Vehicle>) {
+    try {
+      const updatedVehicle = await pb.collection<Vehicle>('vehicles').update(vehicleId, entry, {expand: 'fuel_entries'})
+
+      updateVehicle(updatedVehicle)
+
       $q.notify({
-        type: 'negative',
-        message: 'You are offline!',
+        type: 'positive',
+        message: `Vehicle ${updatedVehicle.name} updated.`,
       })
+
+    } catch(err: any) {
+      errorNotify(err)
     }
   }
 
@@ -49,14 +73,11 @@ export const useVehicles = () => {
       const res = await pb.collection<FuelEntry>('fuel_entries').create(newEntry)
       const updatedVehicle = await pb.collection<Vehicle>('vehicles').update(vehicleId, {
         'fuel_entries+': res.id,
+      }, {
+        expand: 'fuel_entries'
       })
 
-      vehicles.value.forEach(veh => {
-        if (veh.id === updatedVehicle.id) {
-          veh.fuel_entries.push(res.id)
-          veh.expand?.fuel_entries.push(res)
-        }
-      })
+      updateVehicle(updatedVehicle)
 
       $q.notify({
         type: 'positive',
@@ -64,28 +85,7 @@ export const useVehicles = () => {
       })
 
     } catch(err: any) {
-      const details = err as PbFetchError;
-
-      let message: string = "Something wrong happened...";
-      if (!details.status) {
-        isOffline.value = true
-        message = 'You are offline!'
-      } else {
-        isOffline.value = false
-      }
-
-      if (details.status >= 500) {
-        message = 'Server error, this is not your fault.'
-      } else if (details.status >= 400) {
-        message = `Client error, ${details.message.toLowerCase()}`
-      }
-
-      $q.notify({
-        type: 'negative',
-        message: message,
-      })
-
-      throw err
+      errorNotify(err)
     }
   }
 
@@ -93,43 +93,7 @@ export const useVehicles = () => {
     vehicles.value.find((veh) => veh.id === selectedVehicleId.value)
   )
 
-  const currency = computed(() => selectedVehicle.value?.setting_currency ?? DEFAULT_CURRENCY)
-  const currencyPosition = computed(() => selectedVehicle.value?.setting_currency_position ?? DEFAULT_POSITION)
   const measurement = computed(() => selectedVehicle.value?.setting_measurement ?? DEFAULT_MEASUREMENT)
-  const unitDistance = computed(() => {
-    if (measurement.value === 'imperial') {
-      return {
-        short: 'mil.',
-        long: 'miles',
-      }
-    }
-
-    return {
-      short: 'km',
-      long: 'kilometers',
-    }
-  })
-  const unitConsumption = computed(() => {
-    if (measurement.value === 'imperial') {
-      return 'mpg'
-    }
-
-    return 'l/100km'
-  })
-  const unitAmount = computed(() => {
-    if (measurement.value === 'imperial') {
-      return {
-        short: 'g',
-        long: 'gallons',
-      }
-    }
-
-    return {
-      short: 'l',
-      long: 'litres',
-    }
-  })
-
 
   const settings = computed(() => {
     if (measurement.value === 'imperial') {
@@ -140,11 +104,11 @@ export const useVehicles = () => {
         },
         units: {
           dist: {
-            short: 'm',
+            short: 'mi.',
             long: 'miles',
           },
           vol: {
-            short: 'g',
+            short: 'gal',
             long: 'gallons',
           },
           consumption: {
@@ -193,6 +157,7 @@ export const useVehicles = () => {
     // unitDistance,
     settings,
     fetch,
+    editVehicle,
     addFuelEntry,
     getThumbnail,
   }

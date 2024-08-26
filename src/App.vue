@@ -72,7 +72,7 @@
             <KeepAlive>
               <Suspense>
                 <!-- main content -->
-                  <q-page-container class="page">
+                  <q-page-container class="page flex flex-col">
                    <component :is="Component"></component>
                 </q-page-container>
                 <!-- loading state -->
@@ -143,6 +143,7 @@ const toggleRightDrawer = () => {
 
 .page {
   min-height: 100dvh;
+  position: relative;
 }
 
 .v-enter-active,
