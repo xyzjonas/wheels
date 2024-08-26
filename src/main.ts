@@ -20,14 +20,6 @@ app.use(Quasar, {
     Notify,
   },
   config: {
-    config: {
-      loadingBar: {
-        
-      },
-      notify: {
-        icon: 'i-hugeicons'
-      }
-    },
     brand: {
       primary: '#5e44ff',
       secondary: '#0d0924',

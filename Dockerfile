@@ -35,7 +35,7 @@ WORKDIR /app
 COPY --from=pocketbase /pb/pocketbase .
 COPY --from=build-fe /build/dist ./pb_public
 
-COPY ./pocketbase/pb_migrations .
+COPY ./pocketbase/pb_migrations ./pb_migrations/
 # COPY ./pocketbase/pb_hooks /pb/pb_hooks
 
 EXPOSE 8080

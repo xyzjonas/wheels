@@ -60,7 +60,7 @@ const $q = useQuasar()
 // })
 
 const fuelEntries = computed(() => {
-  if (!selectedVehicle.value) {
+  if (!selectedVehicle.value || !selectedVehicle.value.expand) {
     return []
   }
 

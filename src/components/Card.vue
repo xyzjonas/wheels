@@ -4,15 +4,6 @@
   </q-card>
 </template>
 
-<script setup>
+<script setup lang="ts">
 
 </script>
-
-<style lang="css" scoped>
-
-/* @media (prefers-color-scheme: dark){
-  .card {
-    border-color: black;
-  }
-} */
-</style>
