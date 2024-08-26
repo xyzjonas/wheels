@@ -7,7 +7,7 @@
         <div>
           <div class="text-xs text-secondary">VIN</div>
           <div class="text-white flex items-center gap-2 uppercase">
-            akdjalkdjalkwlkadw-awdawd123123
+            {{ selectedVehicle.vin }}
             <q-btn dense rounded color="secondary" unelevated>
               <div class="block content-center w-6 h-6">
                 <q-icon name="i-hugeicons-copy-02" size="14px"></q-icon>
@@ -116,11 +116,9 @@ import { useQuasar, type QTableColumn, type QTableProps } from 'quasar'
 
 const router = useRouter()
 
-const { selectedVehicle, selectedVehicleId, fetch } = useVehicles()
+const { selectedVehicle, selectedVehicleId } = useVehicles()
 
 selectedVehicleId.value = router.currentRoute.value.params.id as string
-
-await fetch()
 
 if (!selectedVehicle.value) {
   selectedVehicleId.value = ''

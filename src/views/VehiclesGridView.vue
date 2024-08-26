@@ -7,10 +7,19 @@ const { fetch } = useVehicles()
 
 console.info("LOAD")
 await fetch();
+
+const refresh = (done: () => void) => {
+  fetch().finally(() => {
+    setTimeout(done, 500)
+  })
+}
+
 </script>
 
 <template> 
-  <main class="p-2 scroll-block">
+  <!-- <main class="p-2 scroll-block"> -->
+    <q-pull-to-refresh @refresh="refresh">
     <vehicles-list />
-  </main>
+  </q-pull-to-refresh>
+  <!-- </main> -->
 </template>

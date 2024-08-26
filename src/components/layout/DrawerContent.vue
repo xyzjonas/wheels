@@ -23,20 +23,21 @@
       :active="router.currentRoute.value.name === 'vehicles'"
       >
       <q-item-section avatar>
-        <q-icon name="i-hugeicons-car-03" />
+        <q-icon name="ion-car" />
       </q-item-section>
       <q-item-section>All vehicles</q-item-section>
     </q-item>
     
+    {{ getThumbnail(selectedVehicle) }}
     <q-item
     clickable
     v-ripple
     @click="toggle"
     >
     <q-item-section avatar>
-        <q-icon :name="isDark ? 'i-hugeicons-moon-02' : 'i-hugeicons-sun-01'" />
+        <q-icon :name="isDark ? 'ion-sunny' : 'ion-moon'" />
       </q-item-section>
-      <q-item-section>{{ isDark ? 'Dark' : 'Light' }} mode</q-item-section>
+      <q-item-section>{{ isDark ? 'Light' : 'Dark' }} mode</q-item-section>
     </q-item>
   </q-list>
 
@@ -54,7 +55,7 @@
       </div>
       <q-img
         ratio="1"
-        src="https://smartson.se/images/historic/articles/analysis-archive-tudor-2/ford-focus-2005-front.jpg"
+        :src="getThumbnail(selectedVehicle)"
         class="border-rd-full"
         style="height: 70px; max-width: 70px"
       />
@@ -78,7 +79,7 @@ import { useRouter } from 'vue-router'
 
 const { isDark, toggle } = useDark()
 
-const { selectedVehicle } = useVehicles()
+const { selectedVehicle, getThumbnail } = useVehicles()
 
 const router = useRouter()
 
@@ -88,7 +89,7 @@ const listItems = computed(() => {
     items.push(
       {
         label: 'Overview',
-        icon: 'ion-planet-outline',
+        icon: 'ion-home',
         click: () =>
           router.push({ name: 'vehicle-home', params: { id: selectedVehicle.value?.id } }),
         active: router.currentRoute.value.name === 'vehicle-home'
@@ -102,7 +103,7 @@ const listItems = computed(() => {
       },
       {
         label: 'Maintenance',
-        icon: 'i-hugeicons-wrench-01',
+        icon: 'ion-build',
         click: () =>
           router.push({ name: 'vehicle-maintenance', params: { id: selectedVehicle.value?.id } }),
         active: router.currentRoute.value.name === 'vehicle-maintenance'

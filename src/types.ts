@@ -1,4 +1,5 @@
 export interface Base {
+  collectionId: string;
   id: string;
   created: Date;
   updated: Date;
@@ -19,6 +20,7 @@ export interface Vehicle extends Base {
   model: string;
   registration: string;
   vin: string;
+  icon: string;
   fuel_entries: string[];
   expand?: {
     fuel_entries: FuelEntry[];

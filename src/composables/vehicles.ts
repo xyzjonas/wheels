@@ -9,6 +9,8 @@ const vehicles = useLocalStorage<Vehicle[]>('vehicles', [])
 const selectedVehicleId = useLocalStorage<string>('selectedVehicle', '')
 const isOffline = ref(false)
 
+
+
 export const useVehicles = () => {
   const pb = new PocketBase()
   const $q = useQuasar()
@@ -39,10 +41,15 @@ export const useVehicles = () => {
     vehicles.value.find((veh) => veh.id === selectedVehicleId.value)
   )
 
+  function getThumbnail(li: Vehicle) {
+    return `/api/files/${li.collectionId}/${li.id}/${li.icon}?thumb=128x128`
+  }
+
   return {
     vehicles,
     selectedVehicleId,
     selectedVehicle,
-    fetch
+    fetch,
+    getThumbnail,
   }
 }

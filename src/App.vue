@@ -8,6 +8,7 @@
         icon="i-hugeicons-arrow-left-double"
         @click="toggleRightDrawer"
         class="ml-auto"
+        label="menu"
       ></q-btn>
     </q-header>
     <!-- <q-header class="bg-primary text-white p-2">
@@ -70,8 +71,9 @@
             <KeepAlive>
               <Suspense>
                 <!-- main content -->
-                <component :is="Component"></component>
-
+                 <div>
+                   <component :is="Component"></component>
+                 </div>
                 <!-- loading state -->
                 <template #fallback> Loading... </template>
               </Suspense>
@@ -84,31 +86,31 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { ref } from 'vue'
 import { RouterView, useRouter } from 'vue-router'
 
 import { useQuasar } from 'quasar'
-import { useDark } from '@/composables/dark'
+// import { useDark } from '@/composables/dark'
 
 import DrawerContent from '@/components/layout/DrawerContent.vue'
-import { useVehicles } from './composables/vehicles'
+// import { useVehicles } from './composables/vehicles'
 
 const { currentRoute } = useRouter()
-const { selectedVehicle } = useVehicles()
+// const { selectedVehicle } = useVehicles()
 
-const routeLabel = computed(() => {
-  if (currentRoute.value.name === 'vehicle-home') {
-    return 'home'
-  }
+// const routeLabel = computed(() => {
+//   if (currentRoute.value.name === 'vehicle-home') {
+//     return 'home'
+//   }
 
-  if (currentRoute.value.name === 'vehicle-fuel') {
-    return 'fuel'
-  }
+//   if (currentRoute.value.name === 'vehicle-fuel') {
+//     return 'fuel'
+//   }
 
-  if (currentRoute.value.name === 'vehicle-maintenance') {
-    return 'maintenance'
-  }
-})
+//   if (currentRoute.value.name === 'vehicle-maintenance') {
+//     return 'maintenance'
+//   }
+// })
 
 const $q = useQuasar()
 $q.iconMapFn = (iconName) => {
@@ -130,4 +132,16 @@ const toggleRightDrawer = () => {
 }
 </script>
 
-<style lang="css"></style>
+<style lang="css">
+
+.v-enter-active,
+.v-leave-active {
+  transition: opacity .5s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
+}
+
+</style>
