@@ -4,12 +4,14 @@
       <q-btn
         v-if="$q.screen.lt.md"
         flat
-        size="8px"
-        icon="i-hugeicons-arrow-left-double"
+        size="10px"
         @click="toggleRightDrawer"
         class="ml-auto"
-        label="menu"
-      ></q-btn>
+      >
+      <div class="flex item-center gap-1">
+        <q-icon name="i-hugeicons-arrow-left-double"></q-icon> MENU
+      </div>
+    </q-btn>
     </q-header>
     <!-- <q-header class="bg-primary text-white p-2">
       <q-toolbar>

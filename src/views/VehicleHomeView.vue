@@ -50,23 +50,12 @@
       </template>
     </q-table>
 
-    <div class="flex flex-wrap gap-2">
-      <card class="p-2 flex-1">
-        <div class="text-xs uppercase">AVG</div>
-        <div class="grid content-center h-full w-full">
-          <div class="flex items-baseline gap-1">
-            <div class="self-center text-xl">
-              <q-icon name="i-hugeicons-fuel-station" class="self-baseline"></q-icon>
-            </div>
-            <div class="text-5xl self-start">5.6</div>
-            <span class="text-sm uppercase">l/100 km</span>
-            <!-- <q-icon class="text-positive  text-lg" name="i-hugeicons-chart-decrease"></q-icon> -->
-          </div>
-        </div>
-        <!-- <q-btn unelevated color="primary" class="mt-auto">fill up</q-btn> -->
-      </card>
+    
+    <div class="home-grid">
+      <vehicle-value-card title="LAST AVG" icon="i-hugeicons-fuel-station" :value="6.6" unit="l/100km" class="min-h-[12rem]" />
+      <vehicle-value-card title="ALL TIME AVG" icon="i-hugeicons-fuel-station" :value="5.6" unit="l/100km" />
 
-      <card class="p-2 min-w-sm">
+      <card class="p-2 min-w-sm card">
         <div class="text-xs uppercase">FUEL</div>
         <div class="flex flex-col gap-1 my-5">
           <div class="flex items-baseline gap-1">
@@ -85,23 +74,12 @@
         <q-btn unelevated color="primary" class="mt-auto">fill up</q-btn>
       </card>
 
-      <q-img
-        @click="router.push({ name: 'vehicle-maintenance', params: { id: selectedVehicle.id } })"
-        fit="cover"
-        class="border-rd-[4px] hover:cursor-pointer flex-1 min-w-xs max-w-md"
-        src="https://theosautomotive.com.au/images/slider/engine_maintenance.jpg"
-      >
-        <div class="p-2 w-full h-full">
-          <q-icon name="i-hugeicons-check-list" class="text-xl"></q-icon>
-          <div class="text-xl uppercase">maintenance</div>
-          <div class="absolute-bottom-right p-2 pr-3 flex items-center gap-2 text-positive">
-            <span class="font-600">OK</span>
-            <q-icon name="i-hugeicons-checkmark-circle-04" class="text-xl"></q-icon>
-          </div>
-        </div>
-      </q-img>
+      <vehicle-refuel-card class="card py-10" />
 
-      <q-btn color="primary" unelevated class="aspect-ratio-square">FILL UP</q-btn>
+      <vehicle-maintenance-card :vehicle="selectedVehicle" class="card min-w-xs max-h-[16rem]"  />
+
+      <vehilce-insurance-card :vehicle="selectedVehicle" class="card" />
+
     </div>
   </main>
 </template>
@@ -111,6 +89,11 @@ import { useRouter } from 'vue-router'
 import { useVehicles } from '@/composables/vehicles'
 
 import Card from '@/components/Card.vue'
+import VehicleRefuelCard from '@/components/vehicle/cards/VehicleRefuelCard.vue'
+import VehicleMaintenanceCard from '@/components/vehicle/cards/VehicleMaintenanceCard.vue'
+import VehilceInsuranceCard from '@/components/vehicle/cards/VehilceInsuranceCard.vue'
+import VehicleValueCard from '@/components/vehicle/cards/VehicleValueCard.vue'
+
 import { computed } from 'vue'
 import { useQuasar, type QTableColumn, type QTableProps } from 'quasar'
 
@@ -176,3 +159,19 @@ const fuelColumns = computed<QTableColumn[]>(() => {
   return columns
 })
 </script>
+
+<style lang="css" scoped>
+.home-grid {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.card {
+  flex: 1 0 auto;
+}
+
+.card:last-child {
+  width: 100%;
+}
+</style>
