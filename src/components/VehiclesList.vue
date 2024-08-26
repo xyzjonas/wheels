@@ -20,7 +20,7 @@
         {
           name: 'registration',
           field: 'registration',
-          label: 'Plates',
+          label: 'Registration',
         },
       ]"
       row-key="name"

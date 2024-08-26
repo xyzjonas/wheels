@@ -25,6 +25,7 @@
     "vue-router": "^4.3.3"
   },
   "devDependencies": {
+    "@quasar/extras": "^1.16.12",
     "@quasar/vite-plugin": "^1.7.0",
     "@rushstack/eslint-patch": "^1.8.0",
     "@tsconfig/node20": "^20.1.4",

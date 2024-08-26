@@ -6,6 +6,8 @@ const router = useRouter();
 
 const { selectedVehicle, selectedVehicleId, fetch } = useVehicles()
 
+selectedVehicleId.value = router.currentRoute.value.params.id as string
+
 await fetch();
 
 

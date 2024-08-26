@@ -10,7 +10,12 @@ export default defineConfig({
         'vertical-align': 'middle'
       }
     }),
-    presetUno(),
+    presetUno({
+      dark: {
+        light: '.body--light',
+        dark: '.body--dark',
+      }
+    }),
     presetWebFonts({
       provider: 'bunny',
       fonts: {

@@ -18,8 +18,9 @@ export interface Vehicle extends Base {
   name: string;
   model: string;
   registration: string;
+  vin: string;
   fuel_entries: string[];
-  expand: {
+  expand?: {
     fuel_entries: FuelEntry[];
   }
 }

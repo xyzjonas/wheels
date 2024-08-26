@@ -1,6 +1,16 @@
 <template>
   <q-layout view="hHh lpR fFf">
-    <q-header class="bg-primary text-white p-2">
+    <q-header class="bg-primary text-white p-2 flex">
+      <q-btn
+        v-if="$q.screen.lt.md"
+        flat
+        size="8px"
+        icon="i-hugeicons-arrow-left-double"
+        @click="toggleRightDrawer"
+        class="ml-auto"
+      ></q-btn>
+    </q-header>
+    <!-- <q-header class="bg-primary text-white p-2">
       <q-toolbar>
         <q-toolbar-title>
           <div class="flex gap-3 items-center">
@@ -21,12 +31,36 @@
           @click="toggle"
           class="mr-3"
         />
-        <q-btn dense flat icon="i-hugeicons-menu-07" @click="toggleRightDrawer" />
+        <q-btn
+          dense
+          flat
+          :icon="rightDrawerOpen ? 'i-hugeicons-cancel-01' : 'i-hugeicons-menu-07'"
+          @click="toggleRightDrawer"
+        />
       </q-toolbar>
-    </q-header>
+    </q-header> -->
+    <!-- <div class="absolute-bottom-right p-2">
+      <q-btn
+        color="primary"
+        fab-mini
+        @click="toggleRightDrawer"
+        icon="i-hugeicons-menu-01"
+        style="right: 0px"
+      />
+    </div> -->
 
-    <q-drawer v-model="rightDrawerOpen" side="right" bordered overlay>
+    <q-drawer v-model="rightDrawerOpen" side="right" bordered>
       <drawer-content></drawer-content>
+      <!-- <div class="absolute-left lg:hidden" style="transform: translateX(-17px) translateY(50%)">
+        <q-btn
+          dense
+          round
+          unelevated
+          color="primary"
+          icon="i-hugeicons-arrow-right-01"
+          @click="toggleRightDrawer"
+        />
+      </div> -->
     </q-drawer>
 
     <q-page-container class="overflow-auto">
@@ -59,7 +93,6 @@ import { useDark } from '@/composables/dark'
 import DrawerContent from '@/components/layout/DrawerContent.vue'
 import { useVehicles } from './composables/vehicles'
 
-
 const { currentRoute } = useRouter()
 const { selectedVehicle } = useVehicles()
 
@@ -77,17 +110,24 @@ const routeLabel = computed(() => {
   }
 })
 
-const { isDark, toggle } = useDark()
-
 const $q = useQuasar()
 $q.iconMapFn = (iconName) => {
-  return {
-    cls: iconName
+  if (iconName.startsWith('i-hugeicons')) {
+
+    return {
+      cls: iconName
+    }
   }
 }
 
 const rightDrawerOpen = ref(false)
+if ($q.screen.gt.sm) {
+  rightDrawerOpen.value = true
+}
+
 const toggleRightDrawer = () => {
   rightDrawerOpen.value = !rightDrawerOpen.value
 }
 </script>
+
+<style lang="css"></style>

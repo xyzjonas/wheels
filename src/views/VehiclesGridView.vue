@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { useVehicles } from "@/composables/vehicles"
-import { onMounted } from "vue";
 
 import VehiclesList from "@/components/VehiclesList.vue";
 
-const { vehicles, fetch } = useVehicles()
+const { fetch } = useVehicles()
 
-onMounted(() => fetch())
+console.info("LOAD")
+await fetch();
 </script>
 
 <template> 
