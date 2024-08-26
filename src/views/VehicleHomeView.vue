@@ -24,19 +24,19 @@
       </div>
     </card>
 
+    <card class="my-3">
     <q-table
-      title="Last Refueling"
+      title="Refueling History"
       flat
       hide-pagination
       :rows="selectedVehicle?.expand?.fuel_entries ?? []"
       :pagination="{
-        rowsPerPage: 3,
+        rowsPerPage: 4,
         sortBy: 'odometer',
         descending: true
       }"
       :columns="fuelColumns"
       row-key="name"
-      class="my-3"
     >
       <template v-slot:bottom>
         <q-btn
@@ -49,6 +49,7 @@
         />
       </template>
     </q-table>
+    </card>
 
     
     <div class="home-grid">

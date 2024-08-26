@@ -4,6 +4,7 @@ import VehiclesGridView from '@/views/VehiclesGridView.vue'
 import VehicleFuelView from '@/views/VehicleFuelView.vue'
 import VehicleMaintenanceView from '@/views/VehicleMaintenanceView.vue'
 import VehicleRefuelView from '@/views/VehicleRefuelView.vue'
+import Root from '@/views/Root.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -11,7 +12,7 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: VehicleHomeView
+      component: Root,
     },
     {
       path: '/vehicles',
