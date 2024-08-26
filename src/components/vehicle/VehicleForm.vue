@@ -29,7 +29,7 @@
       </template>
     </q-input>
 
-    <q-separator class="my-2" />
+    <separator class="text-lg mt-5">Settings</separator>
 
     <q-input
       filled
@@ -68,6 +68,8 @@
 <script setup lang="ts">
 import { useVehicles } from '@/composables/vehicles'
 import type { Vehicle } from '@/types'
+
+import Separator from '@/components/Separator.vue';
 
 const { settings } = useVehicles()
 const model = defineModel<Partial<Vehicle>>({ required: true })

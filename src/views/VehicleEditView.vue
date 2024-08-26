@@ -2,7 +2,7 @@
   <main v-if="selectedVehicle" class="p-2 flex-1 flex flex-col">
 
     <card class="bg-primary text-secondary p-5 mb-5">
-      <div class="text-[4rem] uppercase font-500 tracking-tighter">Settings</div>
+      <div class="text-[4rem] uppercase font-500 tracking-tighter">Edit Vehicle</div>
       <div class="text-white text-lg uppercase">{{selectedVehicle.name}}</div>
       <div>{{ selectedVehicle.model }}</div>
     </card>
