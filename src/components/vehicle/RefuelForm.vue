@@ -86,7 +86,6 @@
 <script setup lang="ts">
 import { useVehicles } from '@/composables/vehicles';
 import type { FuelEntry } from '@/types'
-import { set } from '@vueuse/core';
 
 const { settings } = useVehicles()
 const model = defineModel<Partial<FuelEntry>>({ required: true })
@@ -122,8 +121,8 @@ const amountChanged = (value: string | number | null) => {
   const number = parseFloat(`${value}`)
 
   model.value.amount = number
-  if (model.value.price) {
-    model.value.price_per_unit =  round(model.value.price / model.value.amount, 2)
+  if (model.value.price_per_unit) {
+    model.value.price =  round(model.value.price_per_unit * model.value.amount, 2)
   }
 }
 

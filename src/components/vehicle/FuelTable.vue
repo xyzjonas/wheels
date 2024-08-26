@@ -2,6 +2,8 @@
   <q-table
     title="Refueling History"
     flat
+    :dense="$q.screen.lt.md"
+    no-data-label="No refueling history found"
     :hide-pagination="summary"
     :rows="entries"
     :pagination="pagination"
@@ -20,7 +22,7 @@
     </template>
     <template v-if="!summary" v-slot:top>
       <q-btn
-        icon="i-hugeicons-plus-sign-circle"
+        icon="i-hugeicons-row-insert"
         unelevated
         color="primary"
         label="add entry"
@@ -32,12 +34,18 @@
       <q-td auto-width>
         <q-btn dense flat icon="i-hugeicons-more-vertical">
           <q-menu v-model="props.row.showMenu">
-            <q-list style="min-width: 100px">
+            <q-list>
               <q-item clickable v-close-popup @click="$emit('toEdit', props.row.id)">
-                <q-item-section>Edit</q-item-section>
+                <q-item-section class="flex flex-row gap-3 items-center justify-start no-wrap">
+                  <q-icon name="i-hugeicons-edit-02" />
+                  Edit
+                </q-item-section>
               </q-item>
-              <q-item clickable v-close-popup>
-                <q-item-section>Delete</q-item-section>
+              <q-item clickable v-close-popup class="w-fit text-negative" @click="$emit('delete', props.row.id)">
+                <q-item-section class="flex flex-row gap-3 items-center justify-start no-wrap">
+                  <q-icon name="i-hugeicons-delete-02" />
+                  Delete
+                </q-item-section>
               </q-item>
             </q-list>
           </q-menu>
@@ -49,7 +57,7 @@
 
 <script setup lang="ts">
 import { useVehicles } from '@/composables/vehicles'
-import router from '@/router';
+import router from '@/router'
 import type { FuelEntry } from '@/types'
 import { useQuasar, type QTableColumn } from 'quasar'
 import { computed, ref } from 'vue'
@@ -59,7 +67,7 @@ const props = defineProps<{
   summary?: boolean
 }>()
 
-defineEmits(['toFuelView', 'addEntry', 'toEdit'])
+defineEmits(['toFuelView', 'addEntry', 'toEdit', 'delete'])
 
 const pagination = computed(() => {
   return {
@@ -80,20 +88,39 @@ const formatCurrency = (val: any) => {
   return `${val} ${settings.value.currency.name}`
 }
 
+const formatDate = (val: string) => {
+  const now = new Date()
+  const date = new Date(val)
+
+  if (now.getUTCFullYear() === date.getUTCFullYear()) {
+    return date.toLocaleDateString('en-US', {
+      day: '2-digit',
+      month: 'short',
+      year: undefined
+    })
+  }
+
+  return date.toLocaleDateString('en-US', {
+    day: '2-digit',
+    month: 'short',
+    year: '2-digit'
+  })
+}
+
 const fuelColumns = computed<QTableColumn[]>(() => {
   const columns: QTableColumn[] = [
     {
       field: 'refueled',
       name: 'refueled',
       label: 'Date',
-      format: (val: string) => new Date(val).toLocaleDateString(),
+      format: formatDate,
       align: 'left',
       sortable: true
     },
     {
       field: 'odometer',
       name: 'odometer',
-      label: 'Odometer',
+      label: $q.screen.gt.sm ? 'Odometer' : 'Odo.',
       format: (val: number) => `${val} ${settings.value.units.dist.short}`,
       align: 'left',
       sortable: true
@@ -120,7 +147,7 @@ const fuelColumns = computed<QTableColumn[]>(() => {
   columns.push({
     field: 'price',
     name: 'price',
-    label: 'Total Price',
+    label: $q.screen.gt.sm ? 'Total Price' : 'Total',
     format: formatCurrency,
     align: 'right'
   })
@@ -141,8 +168,6 @@ const fuelColumns = computed<QTableColumn[]>(() => {
 // const toEditView = (refuelItemId: string) => {
 //   router.push({ name: 'refuel-edit', params: { id:  } })
 // }
-
 </script>
-
 
 <style lang="scss" scoped></style>

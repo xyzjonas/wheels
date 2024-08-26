@@ -127,6 +127,30 @@ export const useVehicles = () => {
     }
   }
 
+
+  async function removeFuelEntry(vehicleId: string, entryId: string) {
+    try {
+      await pb.collection<FuelEntry>('fuel_entries').delete(entryId)
+
+      vehicles.value.forEach(veh => {
+        if (veh.id === vehicleId) {
+          if (veh.expand?.fuel_entries) {
+            veh.expand.fuel_entries = veh.expand?.fuel_entries.filter(oldItem => oldItem.id !== entryId)
+          }
+        }
+      })
+
+      $q.notify({
+        type: 'positive',
+        message: 'Fuel entry removed.',
+      })
+
+    } catch(err: any) {
+      errorNotify(err)
+    }
+  }
+
+
   const selectedVehicle = computed<Vehicle | undefined>(() =>
     vehicles.value.find((veh) => veh.id === selectedVehicleId.value)
   )
@@ -198,6 +222,7 @@ export const useVehicles = () => {
     editVehicle,
     fetchFuelEntry,
     editFuelEntry,
+    removeFuelEntry,
     addFuelEntry,
     getThumbnail,
   }

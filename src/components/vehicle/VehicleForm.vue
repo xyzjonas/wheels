@@ -58,7 +58,7 @@
       hint="Set this car's units to metric or imperial"
     />
 
-    <div class="flex gap-2 mt-auto">
+    <div class="flex gap-2 mt-auto pt-5">
       <q-btn unelevated label="Submit" type="submit" color="primary" class="flex-1" />
       <q-btn @click="$emit('cancel')" label="go back" color="primary" outline class="flex-1" />
     </div>

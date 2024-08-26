@@ -109,7 +109,7 @@ const listItems = computed(() => {
       },
       {
         label: 'Edit Vehicle',
-        icon: 'i-hugeicons-edit-02',
+        icon: 'i-hugeicons-edit-01',
         click: () =>
           router.push({ name: 'vehicle-edit', params: { id: selectedVehicle.value?.id } }),
         active: router.currentRoute.value.name === 'vehicle-edit'

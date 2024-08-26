@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div ref="page">
     <refuel-form v-model="newEntry" @submit="submit" @cancel="goBack"></refuel-form>
   </div>
 </template>
@@ -8,8 +8,9 @@
 import RefuelForm from '@/components/vehicle/RefuelForm.vue';
 import { useVehicles } from '@/composables/vehicles';
 import type { FuelEntry } from '@/types';
+import { useWindowScroll } from '@vueuse/core';
 import { date } from 'quasar';
-import { computed, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 const newEntry = ref<Partial<FuelEntry>>({
@@ -25,6 +26,7 @@ const goBack = () => {
   router.push({ name: 'vehicle-home', params: { id: vehicleId.value } })
 }
 
+
 const { addFuelEntry } = useVehicles()
 
 const submit = async (entry: any) => {
@@ -33,6 +35,9 @@ const submit = async (entry: any) => {
     router.push({ name: 'vehicle-home', params: { id: vehicleId.value } })
   } catch {}
 }
+
+const { y } = useWindowScroll()
+onMounted(() => y.value = 0)
 
 </script>
 

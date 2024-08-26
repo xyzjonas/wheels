@@ -1,7 +1,6 @@
 <template>
   <main v-if="selectedVehicle" class="p-2">
-    <card class="bg-primary text-secondary p-5">
-      <div class="text-[4rem] uppercase font-500 tracking-tighter">{{ selectedVehicle.name }}</div>
+    <hero-card :title="selectedVehicle.name">
       <div class="text-white mb-5">{{ selectedVehicle.model }}</div>
       <div class="flex justify-between">
         <div>
@@ -22,42 +21,30 @@
           </div>
         </div>
       </div>
-    </card>
+    </hero-card>
 
     <card class="my-3">
-
-    <fuel-table :entries="fuelEntries" summary @to-fuel-view="router.push({ name: 'vehicle-fuel', params: { id: selectedVehicle.id } })"></fuel-table>
-
-    <!-- <q-table
-      title="Refueling History"
-      flat
-      hide-pagination
-      :rows="selectedVehicle?.expand?.fuel_entries ?? []"
-      :pagination="{
-        rowsPerPage: 4,
-        sortBy: 'odometer',
-        descending: true
-      }"
-      :columns="fuelColumns"
-      row-key="name"
-    >
-      <template v-slot:bottom>
-        <q-btn
-          icon="i-hugeicons-arrow-right-03"
-          dense
-          flat
-          label="see all"
-          class="ml-auto"
-          @click="router.push({ name: 'vehicle-fuel', params: { id: selectedVehicle.id } })"
-        />
-      </template>
-    </q-table> -->
+      <fuel-table
+        :entries="fuelEntries"
+        summary
+        @to-fuel-view="router.push({ name: 'vehicle-fuel', params: { id: selectedVehicle.id } })"
+      ></fuel-table>
     </card>
 
-    
     <div class="home-grid">
-      <vehicle-value-card title="LAST AVG" icon="i-hugeicons-fuel-station" :value="6.6" unit="l/100km" class="min-h-[12rem]" />
-      <vehicle-value-card title="ALL TIME AVG" icon="i-hugeicons-fuel-station" :value="5.6" unit="l/100km" />
+      <vehicle-value-card
+        title="LAST AVG"
+        icon="i-hugeicons-fuel-station"
+        :value="6.6"
+        unit="l/100km"
+        class="min-h-[12rem]"
+      />
+      <vehicle-value-card
+        title="ALL TIME AVG"
+        icon="i-hugeicons-fuel-station"
+        :value="5.6"
+        unit="l/100km"
+      />
 
       <!-- <card class="p-2 min-w-sm card">
         <div class="text-xs uppercase">FUEL</div>
@@ -78,32 +65,31 @@
 
       <vehicle-refuel-card class="card py-10" @click="router.push({ name: 'vehicle-refuel' })" />
 
-      <vehicle-maintenance-card :vehicle="selectedVehicle" class="card min-w-xs max-h-[16rem]"  />
+      <vehicle-maintenance-card :vehicle="selectedVehicle" class="card min-w-xs max-h-[16rem]" />
 
       <vehilce-insurance-card :vehicle="selectedVehicle" class="card" />
-
     </div>
   </main>
 </template>
 
 <script setup lang="ts">
-import { useRouter } from 'vue-router'
 import { useVehicles } from '@/composables/vehicles'
+import { useRouter } from 'vue-router'
 
 import Card from '@/components/Card.vue'
-import VehicleRefuelCard from '@/components/vehicle/cards/VehicleRefuelCard.vue'
+import HeroCard from '@/components/HeroCard.vue'
 import VehicleMaintenanceCard from '@/components/vehicle/cards/VehicleMaintenanceCard.vue'
-import VehilceInsuranceCard from '@/components/vehicle/cards/VehilceInsuranceCard.vue'
+import VehicleRefuelCard from '@/components/vehicle/cards/VehicleRefuelCard.vue'
 import VehicleValueCard from '@/components/vehicle/cards/VehicleValueCard.vue'
+import VehilceInsuranceCard from '@/components/vehicle/cards/VehilceInsuranceCard.vue'
 
-import { computed } from 'vue'
-import { useQuasar, type QTableColumn, type QTableProps } from 'quasar'
 import FuelTable from '@/components/vehicle/FuelTable.vue'
 import type { FuelEntry } from '@/types'
+import { computed } from 'vue'
 
 const router = useRouter()
 
-const { selectedVehicle, selectedVehicleId, settings } = useVehicles()
+const { selectedVehicle, selectedVehicleId } = useVehicles()
 
 selectedVehicleId.value = router.currentRoute.value.params.id as string
 
@@ -115,63 +101,6 @@ if (!selectedVehicle.value) {
 }
 
 const fuelEntries = computed<FuelEntry[]>(() => selectedVehicle.value?.expand?.fuel_entries ?? [])
-
-const formatCurrency = (val: any) => {
-  if (settings.value.currency.position === 'before') {
-    return `${settings.value.currency.name} ${val}`
-  }
-
-  return `${val} ${settings.value.currency.name}`
-}
-
-const $q = useQuasar()
-const fuelColumns = computed<QTableColumn[]>(() => {
-  const columns: QTableColumn[] = [
-    {
-      field: 'odometer',
-      name: 'odometer',
-      label: 'Odometer',
-      format: (val: number) => `${val} ${settings.value.units.dist.short}`,
-      align: 'left',
-      sortable: true
-    },
-    {
-      field: 'refueled',
-      name: 'refueled',
-      label: 'Date',
-      format: (val: string) => new Date(val).toLocaleDateString(),
-      align: 'left',
-      sortable: true
-    },
-    {
-      field: 'amount',
-      name: 'amount',
-      label: 'Amount',
-      format: (val: string) => `${val} ${settings.value.units.vol.short}`,
-      align: 'right'
-    }
-  ]
-
-  if ($q.screen.gt.md) {
-    columns.push({
-      field: 'price_per_unit',
-      name: 'price_per_unit',
-      label: 'Price Per Unit',
-      format: formatCurrency,
-      align: 'right'
-    })
-  }
-
-  columns.push({
-    field: 'price',
-    name: 'price',
-    label: 'Total Price',
-    format: formatCurrency,
-    align: 'right'
-  })
-
-  return columns
-})
 </script>
 
 <style lang="css" scoped>
