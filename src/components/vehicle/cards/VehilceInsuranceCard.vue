@@ -27,9 +27,8 @@
         ]"
         class="mb-10"
       />
-      <div class="absolute-bottom-right p-2 pr-3 flex items-center gap-2 text-positive">
-        <span class="font-600">ACTIVE</span>
-        <q-icon name="i-hugeicons-checkmark-circle-04" class="text-xl"></q-icon>
+      <div class="absolute-bottom-right p-2">
+        <q-btn color="primary" icon="i-hugeicons-document-attachment" label="green card" unelevated></q-btn>
       </div>
     </div>
   </card>
@@ -54,7 +53,7 @@ const rows = [
   {
     left: 'Cost',
     right: '7653,- Kč'
-  }
+  },
 ]
 </script>
 

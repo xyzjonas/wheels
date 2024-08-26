@@ -5,9 +5,6 @@ import VehiclesList from "@/components/VehiclesList.vue";
 
 const { fetch } = useVehicles()
 
-console.info("LOAD")
-await fetch();
-
 const refresh = (done: () => void) => {
   fetch().finally(() => {
     setTimeout(done, 500)

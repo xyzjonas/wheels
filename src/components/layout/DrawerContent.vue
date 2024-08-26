@@ -1,12 +1,10 @@
 <template>
-  <q-list padding separator style="height: calc(100% - 90px); margin-top: 90px; border-right: 1px solid #ddd">
-    <q-item
-      v-for="item in listItems"
-      clickable
-      v-ripple
-      @click="item.click"
-      :active="item.active"
-    >
+  <q-list
+    padding
+    separator
+    style="height: calc(100% - 90px); margin-top: 90px; border-right: 1px solid #ddd"
+  >
+    <q-item v-for="item in listItems" clickable v-ripple @click="item.click" :active="item.active">
       <q-item-section avatar>
         <q-icon :name="item.icon" />
       </q-item-section>
@@ -15,28 +13,30 @@
   </q-list>
 
   <q-list padding separator class="absolute-bottom">
-
-      <q-item
+    <q-item
       clickable
       v-ripple
       @click="router.push({ name: 'vehicles' })"
       :active="router.currentRoute.value.name === 'vehicles'"
-      >
+    >
       <q-item-section avatar>
         <q-icon name="ion-car" />
       </q-item-section>
-      <q-item-section>All vehicles</q-item-section>
+      <q-item-section>All Vehicles</q-item-section>
     </q-item>
 
-    <q-item
-    clickable
-    v-ripple
-    @click="toggle"
-    >
-    <q-item-section avatar>
+    <q-item clickable v-ripple @click="toggle">
+      <q-item-section avatar>
         <q-icon :name="isDark ? 'ion-sunny' : 'ion-moon'" />
       </q-item-section>
-      <q-item-section>{{ isDark ? 'Light' : 'Dark' }} mode</q-item-section>
+      <q-item-section>{{ isDark ? 'Light' : 'Dark' }} Mode</q-item-section>
+    </q-item>
+
+    <q-item clickable v-ripple @click="toAdmin">
+      <q-item-section avatar>
+        <q-icon name="i-hugeicons-dashboard-square-setting" />
+      </q-item-section>
+      <q-item-section>Admin Panel</q-item-section>
     </q-item>
   </q-list>
 
@@ -71,7 +71,7 @@
 </template>
 
 <script setup lang="ts">
-import { useDark } from '@/composables/dark';
+import { useDark } from '@/composables/dark'
 import { useVehicles } from '@/composables/vehicles'
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
@@ -112,6 +112,10 @@ const listItems = computed(() => {
 
   return items
 })
+
+function toAdmin() {
+  window.location.href = '/_/';
+}
 </script>
 
 <style lang="css" scoped></style>

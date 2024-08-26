@@ -95,7 +95,13 @@ import { useQuasar } from 'quasar'
 // import { useDark } from '@/composables/dark'
 
 import DrawerContent from '@/components/layout/DrawerContent.vue'
+import { useVehicles } from './composables/vehicles';
 // import { useVehicles } from './composables/vehicles'
+
+const { fetch } = useVehicles()
+
+fetch();
+
 
 const { currentRoute } = useRouter()
 // const { selectedVehicle } = useVehicles()

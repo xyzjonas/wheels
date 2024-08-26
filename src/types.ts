@@ -15,6 +15,8 @@ export interface FuelEntry extends Base {
   refueled: string;
 }
 
+export interface CreateFuelEntry extends Omit<FuelEntry, "id" | "created" | "updated" | "collectionId" > {}
+
 export interface Vehicle extends Base {
   name: string;
   model: string;
@@ -25,4 +27,13 @@ export interface Vehicle extends Base {
   expand?: {
     fuel_entries: FuelEntry[];
   }
+}
+
+export interface PbFetchError {
+  url: string;
+  status: number;
+  isAbort: boolean;
+  name: string;
+  stack: string;
+  message: string;
 }

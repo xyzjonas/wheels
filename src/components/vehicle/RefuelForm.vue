@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent="$emit('submit', model)" class="flex-fluid p-2">
+  <q-form @submit.prevent="$emit('submit', model)" class="flex-fluid p-2">
     <q-date
       flat
       bordered
@@ -14,9 +14,11 @@
           filled
           type="number"
           v-model="model.odometer"
-          label="Odometer"
+          label="Odometer *"
           lazy-rules
           class="card"
+          hint="Odometer reading"
+          :rules="[mustBeNonZero]"
         >
           <template v-slot:prepend>
             <q-icon name="speed" />
@@ -28,7 +30,9 @@
           :model-value="model.amount"
           @update:model-value="amountChanged"
           type="number"
-          label="Fuel Amount"
+          label="Fuel Amount *"
+          hint="Total amount refueled"
+          :rules="[mustBeNonZero]"
         >
           <template v-slot:prepend>
             <q-icon name="ion-water" />
@@ -40,7 +44,9 @@
           :model-value="model.price_per_unit"
           @update:model-value="unitPriceChanged"
           type="number"
-          label="Price per Unit"
+          label="Price per Unit *"
+          hint="Price for a one unit of fuel"
+          :rules="[mustBeNonZero]"
         >
           <template v-slot:prepend>
             <q-icon name="i-hugeicons-dollar-01" />
@@ -52,14 +58,15 @@
           :model-value="model.price"
           @update:model-value="totalPriceChanged"
           type="number"
-          label="Total"
+          label="Total *"
+          hint="Total price paid"
+          :rules="[mustBeNonZero]"
         >
           <template v-slot:prepend>
             <q-icon name="i-hugeicons-summation-01" />
           </template>
         </q-input>
 
-        <q-input filled type="number" v-model="model.amount" label="Your age *" lazy-rules />
       </div>
       <div class="min-w-xs flex flex-col gap-2 flex-1">
         <div class="flex flex-col flex-1">
@@ -73,7 +80,7 @@
         </div>
       </div>
     </div>
-  </form>
+  </q-form>
 </template>
 
 <script setup lang="ts">
@@ -115,6 +122,19 @@ const amountChanged = (value: string | number | null) => {
   if (model.value.price) {
     model.value.price_per_unit =  round(model.value.price / model.value.amount, 2)
   }
+}
+
+const mustBeNonZero = (val: string | number | null) => {
+  if (isNaN(parseFloat(`${val}`))) {
+    return "Must be a number."
+  }
+
+  const num = parseFloat(`${val}`)
+  if (num <= 0) {
+    return "Must be greater than zero."
+  }
+
+  return true
 }
 </script>
 
