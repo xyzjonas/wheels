@@ -55,26 +55,24 @@
       <vehicle-value-card title="LAST AVG" icon="i-hugeicons-fuel-station" :value="6.6" unit="l/100km" class="min-h-[12rem]" />
       <vehicle-value-card title="ALL TIME AVG" icon="i-hugeicons-fuel-station" :value="5.6" unit="l/100km" />
 
-      <card class="p-2 min-w-sm card">
+      <!-- <card class="p-2 min-w-sm card">
         <div class="text-xs uppercase">FUEL</div>
         <div class="flex flex-col gap-1 my-5">
           <div class="flex items-baseline gap-1">
             <q-icon name="i-hugeicons-fuel-station"></q-icon>
             <span class="text-2xl">32</span>
             <span class="text-sm"> l/100km</span>
-            <!-- <q-icon class="text-positive  text-lg" name="i-hugeicons-chart-decrease"></q-icon> -->
           </div>
           <div class="flex items-baseline gap-1">
             <q-icon name="i-hugeicons-dashboard-speed-01"></q-icon>
             <span class="text-2xl">820</span>
             <span class="text-sm"> km</span>
-            <!-- <q-icon class="text-positive  text-lg" name="i-hugeicons-chart-decrease"></q-icon> -->
           </div>
         </div>
         <q-btn unelevated color="primary" class="mt-auto">fill up</q-btn>
-      </card>
+      </card> -->
 
-      <vehicle-refuel-card class="card py-10" />
+      <vehicle-refuel-card class="card py-10" @click="router.push({ name: 'vehicle-refuel' })" />
 
       <vehicle-maintenance-card :vehicle="selectedVehicle" class="card min-w-xs max-h-[16rem]"  />
 

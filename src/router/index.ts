@@ -3,6 +3,7 @@ import VehicleHomeView from '../views/VehicleHomeView.vue'
 import VehiclesGridView from '@/views/VehiclesGridView.vue'
 import VehicleFuelView from '@/views/VehicleFuelView.vue'
 import VehicleMaintenanceView from '@/views/VehicleMaintenanceView.vue'
+import VehicleRefuelView from '@/views/VehicleRefuelView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -21,6 +22,11 @@ const router = createRouter({
       path: '/vehicles/:id/fuel',
       name: 'vehicle-fuel',
       component: VehicleFuelView,
+    },
+    {
+      path: '/vehicles/:id/fuel/add',
+      name: 'vehicle-refuel',
+      component: VehicleRefuelView,
     },
     {
       path: '/vehicles/:id/maintenance',

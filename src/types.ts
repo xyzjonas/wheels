@@ -12,7 +12,7 @@ export interface FuelEntry extends Base {
   price_per_unit: number;
   reset: boolean;
   full_tank: boolean;
-  refueled: Date;
+  refueled: string;
 }
 
 export interface Vehicle extends Base {
