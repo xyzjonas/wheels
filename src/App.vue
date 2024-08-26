@@ -69,7 +69,7 @@
       <RouterView v-slot="{ Component }" class="h-full">
         <template v-if="Component">
           <Transition mode="out-in">
-            <KeepAlive>
+            <KeepAlive :exclude="['RefuelForm']">
               <Suspense>
                 <!-- main content -->
                   <q-page-container class="page flex flex-col">

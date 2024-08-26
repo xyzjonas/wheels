@@ -65,6 +65,14 @@ export const useVehicles = () => {
     }
   }
 
+  async function fetchFuelEntry(id: string) {
+    try {
+      return await pb.collection<FuelEntry>('fuel_entries').getOne(id)
+    } catch(err: any) {
+      errorNotify(err)
+    }
+  }
+
   async function addFuelEntry(vehicleId: string, entry: CreateFuelEntry) {
     const newEntry = JSON.parse(JSON.stringify(entry))
     try {
@@ -82,6 +90,36 @@ export const useVehicles = () => {
       $q.notify({
         type: 'positive',
         message: 'New fuel entry added.',
+      })
+
+    } catch(err: any) {
+      errorNotify(err)
+    }
+  }
+
+  async function editFuelEntry(vehicleId: string, entryId: string, entry: CreateFuelEntry) {
+    const newEntry = JSON.parse(JSON.stringify(entry))
+    try {
+      newEntry.refueled = new Date(newEntry.refueled).toUTCString()
+
+      const updatedItem = await pb.collection<FuelEntry>('fuel_entries').update(entryId, newEntry)
+
+      vehicles.value.forEach(veh => {
+        if (veh.id === vehicleId) {
+          if (veh.expand?.fuel_entries) {
+            veh.expand.fuel_entries = veh.expand?.fuel_entries.map(oldItem => {
+              if (oldItem.id === updatedItem.id) {
+                return updatedItem;
+              }
+              return oldItem
+            })
+          }
+        }
+      })
+
+      $q.notify({
+        type: 'positive',
+        message: 'Fuel entry updated.',
       })
 
     } catch(err: any) {
@@ -158,6 +196,8 @@ export const useVehicles = () => {
     settings,
     fetch,
     editVehicle,
+    fetchFuelEntry,
+    editFuelEntry,
     addFuelEntry,
     getThumbnail,
   }

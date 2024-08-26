@@ -1,35 +1,14 @@
 <template>
   <main v-if="selectedVehicle" class="p-2 scroll-block">
-    <q-card flat bordered class="flex p-2 mb-10">
-      <div>
-        <div class="text-4xl uppercase flex gap-2">
-          <q-icon name="i-hugeicons-fuel"></q-icon>
-          Fuel
-        </div>
-        <div class="ml-1">{{ selectedVehicle.model }}</div>
-        <q-badge class="ml-1">{{ selectedVehicle.registration }}</q-badge>
-      </div>
-    </q-card>
 
-    <q-timeline color="secondary">
-      <q-timeline-entry
-        v-for="(item, index) in fuelEntries"
-        :subtitle="`${new Date(item.refueled).toLocaleDateString()}`"
-        :title="`${item.odometer.toLocaleString()} km`"
-        :side="index % 2 === 0 ? 'left' : 'right'"
-      >
-        <div class="flex flex-col">
-          <div>
-            <q-icon name="i-hugeicons-fuel"></q-icon>
-            {{ item.amount }} l
-          </div>
-          <div>
-            <q-icon name="i-hugeicons-coins-01"></q-icon>
-            {{ item.price }},- Kč
-          </div>
-        </div>
-      </q-timeline-entry>
-    </q-timeline>
+    <card class="bg-primary text-secondary p-5 mb-5">
+      <div class="text-[4rem] uppercase font-500 tracking-tighter">Fuel Report</div>
+      <div class="text-white text-lg uppercase">{{selectedVehicle.name}}</div>
+      <div>{{ selectedVehicle.model }}</div>
+    </card>
+
+    <fuel-table :entries="fuelEntries" @add-entry="toNewEntry" @to-edit="toEditView"/>
+
   </main>
 </template>
 
@@ -38,6 +17,10 @@ import { useRouter } from 'vue-router'
 import { useVehicles } from '@/composables/vehicles'
 import { useQuasar } from 'quasar'
 import { computed } from 'vue'
+
+import Card from '@/components/Card.vue'
+import FuelTable from '@/components/vehicle/FuelTable.vue'
+import type { FuelEntry } from '@/types'
 
 const router = useRouter()
 
@@ -59,13 +42,14 @@ const $q = useQuasar()
 //   return $q.screen.lt.sm ? 'dense' : $q.screen.lt.md ? 'comfortable' : 'loose'
 // })
 
-const fuelEntries = computed(() => {
-  if (!selectedVehicle.value || !selectedVehicle.value.expand) {
-    return []
-  }
+const toNewEntry = () => {
+  router.push({ name: 'vehicle-refuel', params: { id: selectedVehicleId.value } })
+}
 
-  return selectedVehicle.value.expand.fuel_entries.sort(
-    (a, b) => new Date(b.refueled).getTime() - new Date(a.refueled).getTime()
-  )
-})
+const toEditView = (refuelItemId: string) => {
+  router.push({ name: 'vehicle-refuel-edit', params: { id: selectedVehicleId.value, refuelId: refuelItemId } })
+}
+
+const fuelEntries = computed<FuelEntry[]>(() => selectedVehicle.value?.expand?.fuel_entries ?? [])
+
 </script>

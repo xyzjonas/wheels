@@ -25,7 +25,10 @@
     </card>
 
     <card class="my-3">
-    <q-table
+
+    <fuel-table :entries="fuelEntries" summary @to-fuel-view="router.push({ name: 'vehicle-fuel', params: { id: selectedVehicle.id } })"></fuel-table>
+
+    <!-- <q-table
       title="Refueling History"
       flat
       hide-pagination
@@ -48,7 +51,7 @@
           @click="router.push({ name: 'vehicle-fuel', params: { id: selectedVehicle.id } })"
         />
       </template>
-    </q-table>
+    </q-table> -->
     </card>
 
     
@@ -95,6 +98,8 @@ import VehicleValueCard from '@/components/vehicle/cards/VehicleValueCard.vue'
 
 import { computed } from 'vue'
 import { useQuasar, type QTableColumn, type QTableProps } from 'quasar'
+import FuelTable from '@/components/vehicle/FuelTable.vue'
+import type { FuelEntry } from '@/types'
 
 const router = useRouter()
 
@@ -108,6 +113,8 @@ if (!selectedVehicle.value) {
 } else if (!router.currentRoute.value.params.id) {
   router.push({ name: 'vehicle-home', params: { id: selectedVehicle.value.id } })
 }
+
+const fuelEntries = computed<FuelEntry[]>(() => selectedVehicle.value?.expand?.fuel_entries ?? [])
 
 const formatCurrency = (val: any) => {
   if (settings.value.currency.position === 'before') {
