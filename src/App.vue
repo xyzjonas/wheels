@@ -3,10 +3,15 @@
     <q-header class="bg-primary text-white p-2">
       <q-toolbar>
         <q-toolbar-title>
-          <q-avatar class="mr-2">
-            <img alt="Vue logo" class="logo bg-white p-2" src="@/assets/logo.svg" />
-          </q-avatar>
-          App
+          <div class="flex gap-3 items-center">
+            <q-avatar>
+              <img alt="logo" class="logo bg-white p-1" src="/logo.svg" />
+            </q-avatar>
+            <div v-if="selectedVehicle">
+              <div class="line-height-[1em] uppercase">{{ selectedVehicle.name }}</div>
+              <div class="text-xs ml-1 uppercase">{{ routeLabel }}</div>
+            </div>
+          </div>
         </q-toolbar-title>
 
         <q-btn
@@ -21,20 +26,56 @@
     </q-header>
 
     <q-drawer v-model="rightDrawerOpen" side="right" bordered overlay>
-      <!-- drawer content -->
+      <drawer-content></drawer-content>
     </q-drawer>
-    <q-page-container>
-      <router-view />
+
+    <q-page-container class="overflow-auto">
+      <RouterView v-slot="{ Component }">
+        <template v-if="Component">
+          <Transition mode="out-in">
+            <KeepAlive>
+              <Suspense>
+                <!-- main content -->
+                <component :is="Component"></component>
+
+                <!-- loading state -->
+                <template #fallback> Loading... </template>
+              </Suspense>
+            </KeepAlive>
+          </Transition>
+        </template>
+      </RouterView>
     </q-page-container>
   </q-layout>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { RouterView } from 'vue-router'
+import { computed, ref } from 'vue'
+import { RouterView, useRouter } from 'vue-router'
 
 import { useQuasar } from 'quasar'
 import { useDark } from '@/composables/dark'
+
+import DrawerContent from '@/components/layout/DrawerContent.vue'
+import { useVehicles } from './composables/vehicles'
+
+
+const { currentRoute } = useRouter()
+const { selectedVehicle } = useVehicles()
+
+const routeLabel = computed(() => {
+  if (currentRoute.value.name === 'vehicle-home') {
+    return 'home'
+  }
+
+  if (currentRoute.value.name === 'vehicle-fuel') {
+    return 'fuel'
+  }
+
+  if (currentRoute.value.name === 'vehicle-maintenance') {
+    return 'maintenance'
+  }
+})
 
 const { isDark, toggle } = useDark()
 

@@ -1,6 +1,6 @@
 import { createApp } from 'vue'
 
-import { Quasar } from 'quasar'
+import { Quasar, LoadingBar } from 'quasar'
 import 'quasar/dist/quasar.css'
 
 import App from './App.vue'
@@ -11,10 +11,17 @@ import 'virtual:uno.css'
 const app = createApp(App)
 
 app.use(Quasar, {
-  plugins: {}, // import Quasar plugins and add here
+  plugins: {
+    LoadingBar
+  },
   config: {
+    config: {
+      loadingBar: {
+        
+      }
+    },
     brand: {
-      primary: '#029f48'
+      primary: '#2bb1a6'
     }
   }
 })
