@@ -27,8 +27,7 @@
       </q-item-section>
       <q-item-section>All vehicles</q-item-section>
     </q-item>
-    
-    {{ getThumbnail(selectedVehicle) }}
+
     <q-item
     clickable
     v-ripple
