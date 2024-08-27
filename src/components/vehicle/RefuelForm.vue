@@ -19,6 +19,7 @@
           class="card"
           :hint="odoHint"
           :rules="[mustBeNonZero]"
+          :readonly="readonly"
         >
           <template v-slot:prepend>
             <q-icon name="speed" />
@@ -33,6 +34,7 @@
           label="Fuel Amount *"
           :hint="`Total amount refueled in ${settings.currency.name}`"
           :rules="[mustBeNonZero]"
+          :readonly="readonly"
         >
           <template v-slot:prepend>
             <q-icon name="ion-water" />
@@ -47,6 +49,7 @@
           label="Price per Unit *"
           :hint="`Price for a one unit of fuel in ${settings.units.vol.long}`"
           :rules="[mustBeNonZero]"
+          :readonly="readonly"
         >
           <template v-slot:prepend>
             <q-icon name="i-hugeicons-dollar-01" />
@@ -61,6 +64,7 @@
           label="Total *"
           :hint="`Total price paid in ${settings.currency.name}`"
           :rules="[mustBeNonZero]"
+          :readonly="readonly"
         >
           <template v-slot:prepend>
             <q-icon name="i-hugeicons-summation-01" />
@@ -84,11 +88,11 @@
       </div>
       <div class="min-w-xs flex flex-col gap-2 flex-1">
         <div class="flex flex-col flex-1">
-          <q-toggle v-model="model.full_tank" label="Full Tank" />
-          <q-toggle v-model="model.reset" label="Reset" />
+          <q-toggle :disable="readonly" v-model="model.full_tank" label="Full Tank" />
+          <q-toggle :disable="readonly" v-model="model.reset" label="Reset" />
         </div>
 
-        <div class="flex gap-2 mt-auto flex-1 min-h-[3rem] max-h-[8rem]">
+        <div v-if="!readonly" class="flex gap-2 mt-auto flex-1 min-h-[3rem] max-h-[8rem]">
           <q-btn unelevated label="Submit" type="submit" color="primary" class="flex-1" />
           <q-btn @click="$emit('cancel')" label="go back" color="primary" outline class="flex-1" />
         </div>
@@ -101,12 +105,13 @@
 import { round } from '@/utils/math';
 import { useVehicles } from '@/composables/vehicles';
 import type { FuelEntry } from '@/types'
-import { computed } from 'vue';
+import { computed, onMounted } from 'vue';
+import { date } from 'quasar';
 
 const { settings } = useVehicles()
 const model = defineModel<Partial<FuelEntry>>({ required: true })
 
-const props = defineProps<{ lastOdometer?: number }>()
+const props = defineProps<{ lastOdometer?: number, readonly?: boolean, }>()
 const odoHint = computed(() => {
   if (props.lastOdometer) {
     return `Odometer reading in ${settings.value.units.dist.long} (last reading: ${props.lastOdometer} ${settings.value.units.dist.short})`
@@ -157,6 +162,11 @@ const mustBeNonZero = (val: string | number | null) => {
 
   return true
 }
+
+onMounted(() => {
+  model.value.refueled = date.formatDate(model.value.refueled, 'YYYY/MM/DD')
+})
+
 </script>
 
 <style lang="css" scoped>

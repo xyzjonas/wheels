@@ -6,6 +6,7 @@
     no-data-label="No refueling history found"
     :hide-pagination="summary"
     :rows="entries"
+    @row-click="(evt, row, index) => $emit('row-click', row.id)"
     :pagination="pagination"
     :columns="fuelColumns"
     row-key="name"
@@ -74,10 +75,10 @@ import { computed } from 'vue'
 
 const props = defineProps<{
   entries: FuelEntry[]
-  summary?: boolean
+  summary?: boolean,
 }>()
 
-defineEmits(['toFuelView', 'addEntry', 'toEdit', 'delete', 'recompute'])
+defineEmits(['toFuelView', 'addEntry', 'toEdit', 'delete', 'recompute', 'row-click'])
 
 const pagination = computed(() => {
   return {

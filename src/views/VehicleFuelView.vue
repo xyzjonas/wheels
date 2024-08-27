@@ -11,6 +11,7 @@
       @to-edit="toEditView"
       @delete="onDelete"
       @recompute="recompute"
+      @row-click="toRefuelEntryView"
     />
 
     <q-dialog v-model="showDeleteDialog" position="bottom">
@@ -62,29 +63,29 @@ import { useRouter } from 'vue-router'
 import HeroCard from '@/components/HeroCard.vue'
 import FuelTable from '@/components/vehicle/FuelTable.vue'
 import type { FuelEntry } from '@/types'
+import { useRoutingGuard } from '@/composables/routing'
 
 const router = useRouter()
 
-const { selectedVehicle, selectedVehicleId, editFuelEntry, removeFuelEntry } = useVehicles()
+const { getVehicleOrRouteAway, vehicleId } = useRoutingGuard()
+getVehicleOrRouteAway()
 
-selectedVehicleId.value = router.currentRoute.value.params.id as string
-
-if (!selectedVehicle.value) {
-  selectedVehicleId.value = ''
-  router.push({ name: 'vehicles' })
-} else if (!router.currentRoute.value.params.id) {
-  router.push({ name: 'vehicle-home', params: { id: selectedVehicle.value.id } })
-}
+const { selectedVehicle, editFuelEntry, removeFuelEntry } = useVehicles()
 
 const toNewEntry = () => {
-  router.push({ name: 'vehicle-refuel', params: { id: selectedVehicleId.value } })
+  router.push({ name: 'vehicle-refuel', params: { id: vehicleId.value } })
 }
 
 const toEditView = (refuelItemId: string) => {
   router.push({
     name: 'vehicle-refuel-edit',
-    params: { id: selectedVehicleId.value, refuelId: refuelItemId }
+    params: { id: vehicleId.value, refuelId: refuelItemId }
   })
+}
+
+const toRefuelEntryView = (id: string) => {
+  console.info(id);
+  router.push({ name: 'vehicle-fuel-detail', params: { id: selectedVehicle.value?.id, refuelId: id } })
 }
 
 const deleteLoading = ref(false)
@@ -98,7 +99,7 @@ const onDelete = (refuelItemId: string) => {
 const actualDelete = async () => {
   deleteLoading.value = true
   try {
-    await removeFuelEntry(selectedVehicleId.value, fuelEntryToBeDeletedId.value)
+    await removeFuelEntry(vehicleId.value, fuelEntryToBeDeletedId.value)
   } finally {
     setTimeout(() => {
       deleteLoading.value = false
@@ -138,7 +139,7 @@ async function recompute() {
       if (current.full_tank && tempOdo === 0) {
         const intervalAverage = (current.amount / (current.odometer - prev.odometer)) * 100
         current.average = intervalAverage
-        await editFuelEntry(selectedVehicleId.value, current.id, current)
+        await editFuelEntry(vehicleId.value, current.id, current)
 
         tempOdo = 0
         tempAmount = 0
@@ -146,7 +147,7 @@ async function recompute() {
         const totalAmount = tempAmount + current.amount
         const intervalAverage = (totalAmount / (current.odometer - tempOdo)) * 100
         current.average = intervalAverage
-        await editFuelEntry(selectedVehicleId.value, current.id, current)
+        await editFuelEntry(vehicleId.value, current.id, current)
 
         tempOdo = 0
         tempAmount = 0
