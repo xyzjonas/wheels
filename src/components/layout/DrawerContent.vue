@@ -32,11 +32,17 @@
       <q-item-section>{{ isDark ? 'Light' : 'Dark' }} Mode</q-item-section>
     </q-item>
 
-    <q-item clickable v-ripple @click="toAdmin">
+    <!-- <q-item clickable v-ripple @click="toAdmin">
       <q-item-section avatar>
         <q-icon name="i-hugeicons-dashboard-square-setting" />
       </q-item-section>
       <q-item-section>Admin Panel</q-item-section>
+    </q-item> -->
+    <q-item class="text-xs text-gray">
+      <q-item-section class="flex flex-row items-end gap-2">
+          <q-icon name="ion-hammer" class="ml-auto" />
+          <span>version {{ version }}</span>
+      </q-item-section>
     </q-item>
   </q-list>
 
@@ -73,6 +79,7 @@
 <script setup lang="ts">
 import { useDark } from '@/composables/dark'
 import { useVehicles } from '@/composables/vehicles'
+import { version } from '@/version';
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 
