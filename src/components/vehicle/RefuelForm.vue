@@ -67,6 +67,20 @@
           </template>
         </q-input>
 
+        <q-input
+          filled
+          :model-value="model.average"
+          readonly
+          @update:model-value="totalPriceChanged"
+          type="number"
+          label="Average Consumption"
+          :hint="`Average fuel consumption since last refueling in ${settings.units.consumption.short}`"
+        >
+          <template v-slot:prepend>
+            <q-icon name="i-hugeicons-fuel-02" />
+          </template>
+        </q-input>
+
       </div>
       <div class="min-w-xs flex flex-col gap-2 flex-1">
         <div class="flex flex-col flex-1">

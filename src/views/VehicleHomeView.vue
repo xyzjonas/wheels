@@ -36,9 +36,20 @@
       <vehicle-avg-consumption-card title="year average" :entries="thisYear" />
       <vehicle-avg-consumption-card title="all time avg" :entries="fuelEntries" />
 
-      <vehicle-refuel-button-card class="card py-10" @click="router.push({ name: 'vehicle-refuel' })" />
+      <vehicle-refuel-button-card
+        class="card py-10"
+        @click="router.push({ name: 'vehicle-refuel' })"
+      />
 
       <vehicle-maintenance-card :vehicle="selectedVehicle" class="card min-w-xs max-h-[16rem]" />
+
+      <vehicle-value-card
+        title="driven since purchase"
+        :subtitle="`Owned since ${ownedSince}`"
+        :value="drivenTotal"
+        icon="i-hugeicons-road"
+        :unit="settings.units.dist.long"
+      />
 
       <vehilce-insurance-card :vehicle="selectedVehicle" class="card" />
     </div>
@@ -55,6 +66,7 @@ import VehicleMaintenanceCard from '@/components/vehicle/cards/VehicleMaintenanc
 import VehicleRefuelButtonCard from '@/components/vehicle/cards/VehicleRefuelButtonCard.vue'
 import VehilceInsuranceCard from '@/components/vehicle/cards/VehilceInsuranceCard.vue'
 import VehicleAvgConsumptionCard from '@/components/vehicle/cards/VehicleAvgConsumptionCard.vue'
+import VehicleValueCard from '@/components/vehicle/cards/VehicleValueCard.vue'
 
 import FuelTable from '@/components/vehicle/FuelTable.vue'
 import type { FuelEntry } from '@/types'
@@ -62,7 +74,7 @@ import { computed } from 'vue'
 
 const router = useRouter()
 
-const { selectedVehicle, selectedVehicleId } = useVehicles()
+const { selectedVehicle, selectedVehicleId, settings } = useVehicles()
 
 selectedVehicleId.value = router.currentRoute.value.params.id as string
 
@@ -74,14 +86,37 @@ if (!selectedVehicle.value) {
 }
 
 const fuelEntries = computed<FuelEntry[]>(() => selectedVehicle.value?.expand?.fuel_entries ?? [])
+const sorted = computed(() => fuelEntries.value.sort((a, b) => b.odometer - a.odometer))
 const lastEntry = computed(() => {
-  const sorted = fuelEntries.value.filter(e => e.average).sort((a, b) => a.odometer - b.odometer)
-  if (sorted.length > 0) {
-    return [sorted[0]]
+  const avgOnly = sorted.value.filter((e) => e.average)
+  if (avgOnly.length > 0) {
+    return [avgOnly[0]]
   }
   return []
 })
-const thisYear = computed(() => fuelEntries.value.filter(item => new Date(item.refueled).getUTCFullYear() === new Date().getUTCFullYear()))
+const thisYear = computed(() =>
+  fuelEntries.value.filter(
+    (item) => new Date(item.refueled).getUTCFullYear() === new Date().getUTCFullYear()
+  )
+)
+
+const drivenTotal = computed(() => {
+  if (sorted.value.length > 0 && selectedVehicle.value?.purchased_odometer !== undefined) {
+    return sorted.value[0].odometer - selectedVehicle.value.purchased_odometer
+  }
+
+  return 'N/A'
+})
+
+const ownedSince = computed(() => {
+  if (selectedVehicle.value?.purchased) {
+    return new Date(selectedVehicle.value.purchased).toLocaleDateString('en-US', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric'
+    })
+  }
+})
 </script>
 
 <style lang="css" scoped>

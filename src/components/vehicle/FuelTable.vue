@@ -174,10 +174,6 @@ const fuelColumns = computed<QTableColumn[]>(() => {
 
   return columns
 })
-
-// const toEditView = (refuelItemId: string) => {
-//   router.push({ name: 'refuel-edit', params: { id:  } })
-// }
 </script>
 
 <style lang="scss" scoped></style>

@@ -49,7 +49,11 @@ export const useVehicles = () => {
 
   async function editVehicle(vehicleId: string, entry: Partial<Vehicle>) {
     try {
-      const updatedVehicle = await pb.collection<Vehicle>('vehicles').update(vehicleId, entry, {expand: 'fuel_entries'})
+      const data: Vehicle = JSON.parse(JSON.stringify(entry))
+      if (data.purchased) {
+        data.purchased = new Date(data.purchased).toUTCString()
+      }
+      const updatedVehicle = await pb.collection<Vehicle>('vehicles').update(vehicleId, data, {expand: 'fuel_entries'})
 
       updateVehicle(updatedVehicle)
 

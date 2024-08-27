@@ -4,6 +4,7 @@
       <div class="text-white text-lg uppercase">{{selectedVehicle.name}}</div>
       <div>{{ selectedVehicle.model }}</div>
     </hero-card>
+    {{ vehicle.purchased }}
     <vehicle-form v-model="vehicle" @submit="submit" @cancel="goBack" @upload-icon="uploadIcon" class="flex-1"/>
   </main>
 </template>
@@ -17,6 +18,7 @@ import { useRouter } from 'vue-router';
 import HeroCard from '@/components/HeroCard.vue';
 import { computed } from '@vue/reactivity';
 import type { Vehicle } from '@/types';
+import { date } from 'quasar';
 
 const { selectedVehicle, editVehicle, uploadThumbnail } = useVehicles()
 
@@ -26,6 +28,10 @@ if (!selectedVehicle.value) {
 }
 
 const vehicle = ref<Vehicle>(JSON.parse(JSON.stringify(selectedVehicle.value)))
+if (vehicle.value.purchased) {
+  vehicle.value.purchased = date.formatDate(vehicle.value.purchased, 'YYYY-MM-DD')
+}
+
 const vehicleId = computed(() => router.currentRoute.value.params.id as string);
 
 const submit = async (entry: any) => {

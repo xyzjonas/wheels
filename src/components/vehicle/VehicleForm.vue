@@ -25,6 +25,7 @@
     </q-input>
 
     <separator class="text-lg mt-10">Purchase</separator>
+    
     <q-input filled v-model="model.purchased" type="date" label="Date" hint="Date the vehicle was purchased on">
       <template v-slot:prepend>
         <q-icon name="i-hugeicons-calendar-01" />

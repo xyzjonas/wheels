@@ -19,13 +19,13 @@ import VehicleValueCard from './VehicleValueCard.vue'
 const { settings } = useVehicles()
 const props = defineProps<{ entries: FuelEntry[], title?: string }>()
 
-const sorted = computed(() => props.entries.sort((a, b) => a.odometer - b.odometer))
+// const sorted = computed(() => props.entries.sort((a, b) => b.odometer - a.odometer))
 const avg = computed(() => {
-  if (sorted.value.length <= 0) {
+  if (props.entries.length <= 0) {
     return 'N/A'
   }
 
-  const avg = sorted.value.reduce((avg, currentItem) => {
+  const avg = props.entries.reduce((avg, currentItem) => {
     if (!currentItem.average) {
       return avg
     }
