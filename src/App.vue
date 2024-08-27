@@ -1,5 +1,5 @@
 <template>
-  <q-layout view="hHh lpR fFf">
+  <q-layout ref="body" view="hHh lpR fFf">
     <q-header class="bg-primary text-white p-2 flex">
       <q-btn
         v-if="$q.screen.lt.md"
@@ -96,7 +96,7 @@ import { useQuasar } from 'quasar'
 import DrawerContent from '@/components/layout/DrawerContent.vue'
 import { useVehicles } from './composables/vehicles';
 import type { Vehicle } from './types';
-import { useLocalStorage } from '@vueuse/core';
+import { useLocalStorage, useSwipe } from '@vueuse/core';
 // import { useVehicles } from './composables/vehicles'
 
 const { fetch } = useVehicles()
@@ -150,6 +150,19 @@ if ($q.screen.gt.sm) {
 const toggleRightDrawer = () => {
   rightDrawerOpen.value = !rightDrawerOpen.value
 }
+
+
+const body = ref(null)
+const { isSwiping, direction } = useSwipe(body)
+watch(isSwiping, () => {
+  if (direction.value === 'left') {
+    rightDrawerOpen.value = true
+  }
+  if (direction.value === 'right') {
+    rightDrawerOpen.value = false
+  }
+})
+
 </script>
 
 <style lang="css">

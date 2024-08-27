@@ -18,7 +18,7 @@ import Card from '@/components/Card.vue'
 
 defineProps<{
   title: string
-  value: number
+  value: number | string
   icon: string
   unit?: string
 }>()

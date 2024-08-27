@@ -28,7 +28,7 @@ app.use(Quasar, {
       negative: '#9b1c31',
     },
     notify: {
-      position: 'top',
+      position: 'bottom-left',
     }
   }
 })

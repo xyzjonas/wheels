@@ -32,38 +32,11 @@
     </card>
 
     <div class="home-grid">
-      <vehicle-value-card
-        title="LAST AVG"
-        icon="i-hugeicons-fuel-station"
-        :value="6.6"
-        unit="l/100km"
-        class="min-h-[12rem]"
-      />
-      <vehicle-value-card
-        title="ALL TIME AVG"
-        icon="i-hugeicons-fuel-station"
-        :value="5.6"
-        unit="l/100km"
-      />
+      <vehicle-avg-consumption-card title="last average" :entries="[lastEntry]" />
+      <vehicle-avg-consumption-card title="year average" :entries="thisYear" />
+      <vehicle-avg-consumption-card title="all time avg" :entries="fuelEntries" />
 
-      <!-- <card class="p-2 min-w-sm card">
-        <div class="text-xs uppercase">FUEL</div>
-        <div class="flex flex-col gap-1 my-5">
-          <div class="flex items-baseline gap-1">
-            <q-icon name="i-hugeicons-fuel-station"></q-icon>
-            <span class="text-2xl">32</span>
-            <span class="text-sm"> l/100km</span>
-          </div>
-          <div class="flex items-baseline gap-1">
-            <q-icon name="i-hugeicons-dashboard-speed-01"></q-icon>
-            <span class="text-2xl">820</span>
-            <span class="text-sm"> km</span>
-          </div>
-        </div>
-        <q-btn unelevated color="primary" class="mt-auto">fill up</q-btn>
-      </card> -->
-
-      <vehicle-refuel-card class="card py-10" @click="router.push({ name: 'vehicle-refuel' })" />
+      <vehicle-refuel-button-card class="card py-10" @click="router.push({ name: 'vehicle-refuel' })" />
 
       <vehicle-maintenance-card :vehicle="selectedVehicle" class="card min-w-xs max-h-[16rem]" />
 
@@ -79,9 +52,9 @@ import { useRouter } from 'vue-router'
 import Card from '@/components/Card.vue'
 import HeroCard from '@/components/HeroCard.vue'
 import VehicleMaintenanceCard from '@/components/vehicle/cards/VehicleMaintenanceCard.vue'
-import VehicleRefuelCard from '@/components/vehicle/cards/VehicleRefuelCard.vue'
-import VehicleValueCard from '@/components/vehicle/cards/VehicleValueCard.vue'
+import VehicleRefuelButtonCard from '@/components/vehicle/cards/VehicleRefuelButtonCard.vue'
 import VehilceInsuranceCard from '@/components/vehicle/cards/VehilceInsuranceCard.vue'
+import VehicleAvgConsumptionCard from '@/components/vehicle/cards/VehicleAvgConsumptionCard.vue'
 
 import FuelTable from '@/components/vehicle/FuelTable.vue'
 import type { FuelEntry } from '@/types'
@@ -101,6 +74,8 @@ if (!selectedVehicle.value) {
 }
 
 const fuelEntries = computed<FuelEntry[]>(() => selectedVehicle.value?.expand?.fuel_entries ?? [])
+const lastEntry = computed(() => fuelEntries.value.filter(e => e.average).sort((a, b) => a.odometer - b.odometer).reduce((prev, curr) => curr))
+const thisYear = computed(() => fuelEntries.value.filter(item => new Date(item.refueled).getUTCFullYear() === new Date().getUTCFullYear()))
 </script>
 
 <style lang="css" scoped>

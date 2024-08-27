@@ -1,6 +1,6 @@
 <template>
   <div ref="page">
-    <refuel-form v-model="newEntry" @submit="submit" @cancel="goBack"></refuel-form>
+    <refuel-form v-model="newEntry" :last-odometer="lastOdo" @submit="submit" @cancel="goBack"></refuel-form>
   </div>
 </template>
 
@@ -26,6 +26,8 @@ const goBack = () => {
   router.push({ name: 'vehicle-home', params: { id: vehicleId.value } })
 }
 
+const { selectedVehicle } = useVehicles()
+const lastOdo = computed(() => (selectedVehicle.value?.expand?.fuel_entries ?? []).sort((a, b) => b.odometer - a.odometer)[0]?.odometer)
 
 const { addFuelEntry } = useVehicles()
 

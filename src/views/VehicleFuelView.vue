@@ -10,6 +10,7 @@
       @add-entry="toNewEntry"
       @to-edit="toEditView"
       @delete="onDelete"
+      @recompute="recompute"
     />
 
     <q-dialog v-model="showDeleteDialog" position="bottom">
@@ -35,13 +36,28 @@
         </q-card-section>
       </q-card>
     </q-dialog>
+
+    <q-dialog v-model="recomputing" position="bottom">
+      <q-card class="min-w-xs flex flex-col">
+        <q-card-section class="flex flex-col items-center justify-center gap-10 w-full no-wrap pb-2 my-10">
+          <q-circular-progress
+          indeterminate
+          size="5rem"
+          color="primary"
+          />
+          <span class="font-500">Updating fuel items...</span>
+        </q-card-section>
+        <q-linear-progress :value="itemsDone / sorted.length" size="6px"/>
+      </q-card>
+    </q-dialog>
+
   </main>
 </template>
 
 <script setup lang="ts">
-import { useRouter } from 'vue-router'
 import { useVehicles } from '@/composables/vehicles'
 import { computed, ref } from 'vue'
+import { useRouter } from 'vue-router'
 
 import HeroCard from '@/components/HeroCard.vue'
 import FuelTable from '@/components/vehicle/FuelTable.vue'
@@ -49,7 +65,7 @@ import type { FuelEntry } from '@/types'
 
 const router = useRouter()
 
-const { selectedVehicle, selectedVehicleId, removeFuelEntry } = useVehicles()
+const { selectedVehicle, selectedVehicleId, editFuelEntry, removeFuelEntry } = useVehicles()
 
 selectedVehicleId.value = router.currentRoute.value.params.id as string
 
@@ -92,4 +108,57 @@ const actualDelete = async () => {
 }
 
 const fuelEntries = computed<FuelEntry[]>(() => selectedVehicle.value?.expand?.fuel_entries ?? [])
+
+const sorted = computed(() => fuelEntries.value.sort((a, b) => a.odometer - b.odometer))
+const recomputing = ref(false)
+const itemsDone = ref(1)
+async function recompute() {
+  if (sorted.value.length <= 1) {
+    return
+  }
+
+  itemsDone.value = 1
+  recomputing.value = true
+
+  try {
+    let tempOdo = 0
+    let tempAmount = 0
+
+    for (let index = 1; index < sorted.value.length; index++) {
+      const prev = sorted.value[index - 1]
+      const current = sorted.value[index]
+      itemsDone.value += 1
+
+      if (current.reset) {
+        tempOdo = 0
+        tempAmount = 0
+        continue
+      }
+
+      if (current.full_tank && tempOdo === 0) {
+        const intervalAverage = (current.amount / (current.odometer - prev.odometer)) * 100
+        current.average = intervalAverage
+        await editFuelEntry(selectedVehicleId.value, current.id, current)
+
+        tempOdo = 0
+        tempAmount = 0
+      } else if (current.full_tank) {
+        const totalAmount = tempAmount + current.amount
+        const intervalAverage = (totalAmount / (current.odometer - tempOdo)) * 100
+        current.average = intervalAverage
+        await editFuelEntry(selectedVehicleId.value, current.id, current)
+
+        tempOdo = 0
+        tempAmount = 0
+      } else {
+        if (tempOdo === 0) {
+          tempOdo = prev.odometer
+        }
+        tempAmount += current.amount
+      }
+    }
+  } finally {
+    setTimeout(() =>  recomputing.value = false, 300)
+  }
+}
 </script>

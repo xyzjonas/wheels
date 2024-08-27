@@ -21,14 +21,25 @@
       />
     </template>
     <template v-if="!summary" v-slot:top>
-      <q-btn
+      <div class="ml-auto flex gap-2">
+        <q-btn
+        icon="i-hugeicons-calculator"
+        unelevated
+        flat
+        color="primary"
+        label="re-calculate averages"
+        class="ml-auto"
+        @click="$emit('recompute')"
+      />
+        <q-btn
         icon="i-hugeicons-row-insert"
         unelevated
         color="primary"
-        label="add entry"
+        label="new entry"
         class="ml-auto"
         @click="$emit('addEntry')"
-      />
+        />
+      </div>
     </template>
     <template v-slot:body-cell-menu="props">
       <q-td auto-width>
@@ -57,17 +68,16 @@
 
 <script setup lang="ts">
 import { useVehicles } from '@/composables/vehicles'
-import router from '@/router'
 import type { FuelEntry } from '@/types'
 import { useQuasar, type QTableColumn } from 'quasar'
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 
 const props = defineProps<{
   entries: FuelEntry[]
   summary?: boolean
 }>()
 
-defineEmits(['toFuelView', 'addEntry', 'toEdit', 'delete'])
+defineEmits(['toFuelView', 'addEntry', 'toEdit', 'delete', 'recompute'])
 
 const pagination = computed(() => {
   return {

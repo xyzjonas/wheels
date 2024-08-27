@@ -8,8 +8,6 @@ import { useApi } from '@/composables/api'
 
 const vehicles = useLocalStorage<Vehicle[]>('vehicles', [])
 const selectedVehicleId = useLocalStorage<string>('selectedVehicle', '')
-// const isOffline = ref(false)
-
 
 const DEFAULT_CURRENCY = "EUR"
 const DEFAULT_POSITION = "after"

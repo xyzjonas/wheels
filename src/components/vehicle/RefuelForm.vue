@@ -17,7 +17,7 @@
           label="Odometer *"
           lazy-rules
           class="card"
-          :hint="`Odometer reading in ${settings.units.dist.long}`"
+          :hint="odoHint"
           :rules="[mustBeNonZero]"
         >
           <template v-slot:prepend>
@@ -84,19 +84,24 @@
 </template>
 
 <script setup lang="ts">
+import { round } from '@/utils/math';
 import { useVehicles } from '@/composables/vehicles';
 import type { FuelEntry } from '@/types'
+import { computed } from 'vue';
 
 const { settings } = useVehicles()
 const model = defineModel<Partial<FuelEntry>>({ required: true })
 
+const props = defineProps<{ lastOdometer?: number }>()
+const odoHint = computed(() => {
+  if (props.lastOdometer) {
+    return `Odometer reading in ${settings.value.units.dist.long} (last reading: ${props.lastOdometer} ${settings.value.units.dist.short})`
+  }
+
+  return `Odometer reading in ${settings.value.units.dist.long}`
+})
+
 defineEmits(['submit', 'cancel'])
-
-function round(value: number, precision: number) {
-    var multiplier = Math.pow(10, precision || 0);
-    return Math.round(value * multiplier) / multiplier;
-}
-
 
 const unitPriceChanged = (value: string | number | null) => {
   const number = parseFloat(`${value}`)
