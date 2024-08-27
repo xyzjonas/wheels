@@ -30,7 +30,11 @@ export interface Vehicle extends Base {
   expand?: {
     fuel_entries: FuelEntry[];
   }
+  purchased: string;
+  purchased_price: number;
+  purchased_odometer: number;
 
+  setting_color?: string;
   setting_currency?: string;
   setting_measurement?: SettingMeasurement;
   setting_currency_position?: SettingCurrencyPosition;

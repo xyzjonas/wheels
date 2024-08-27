@@ -87,7 +87,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { RouterView, useRouter } from 'vue-router'
 
 import { useQuasar } from 'quasar'
@@ -95,6 +95,8 @@ import { useQuasar } from 'quasar'
 
 import DrawerContent from '@/components/layout/DrawerContent.vue'
 import { useVehicles } from './composables/vehicles';
+import type { Vehicle } from './types';
+import { useLocalStorage } from '@vueuse/core';
 // import { useVehicles } from './composables/vehicles'
 
 const { fetch } = useVehicles()
@@ -103,7 +105,18 @@ fetch();
 
 
 const { currentRoute } = useRouter()
-// const { selectedVehicle } = useVehicles()
+const { selectedVehicle } = useVehicles()
+
+const primaryColor = useLocalStorage('primary-color', '#5e44ff')
+watch(selectedVehicle, (val: Vehicle | undefined) => {
+  if (val && val.setting_color) {
+    primaryColor.value = val.setting_color
+    document.body.style.setProperty('--q-primary', `${val.setting_color}`)
+  } else {
+    primaryColor.value = '#5e44ff'
+    document.body.style.setProperty('--q-primary', '#5e44ff')
+  }
+})
 
 // const routeLabel = computed(() => {
 //   if (currentRoute.value.name === 'vehicle-home') {

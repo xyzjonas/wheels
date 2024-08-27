@@ -4,7 +4,7 @@
       <div class="text-white text-lg uppercase">{{selectedVehicle.name}}</div>
       <div>{{ selectedVehicle.model }}</div>
     </hero-card>
-    <vehicle-form v-model="vehicle" @submit="submit" class="flex-1"/>
+    <vehicle-form v-model="vehicle" @submit="submit" @cancel="goBack" @upload-icon="uploadIcon" class="flex-1"/>
   </main>
 </template>
 
@@ -18,7 +18,7 @@ import HeroCard from '@/components/HeroCard.vue';
 import { computed } from '@vue/reactivity';
 import type { Vehicle } from '@/types';
 
-const { selectedVehicle, editVehicle } = useVehicles()
+const { selectedVehicle, editVehicle, uploadThumbnail } = useVehicles()
 
 const router = useRouter()
 if (!selectedVehicle.value) {
@@ -33,6 +33,16 @@ const submit = async (entry: any) => {
     await editVehicle(vehicleId.value, entry)
     router.push({ name: 'vehicle-home', params: { id: vehicleId.value } })
   } catch {}
+}
+
+const uploadIcon = async (iconFile: any) => {
+  console.info(iconFile)
+  await uploadThumbnail(vehicleId.value, iconFile)
+  vehicle.value = JSON.parse(JSON.stringify(selectedVehicle.value))
+}
+
+const goBack = () => {
+  router.push({ name: 'vehicle-home', params: { id: vehicleId.value } })
 }
 
 </script>

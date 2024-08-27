@@ -12,12 +12,7 @@
       </template>
     </q-input>
 
-    <q-input
-      filled
-      v-model="model.name"
-      label="Name"
-      hint="Name it anything you like ;)"
-    >
+    <q-input filled v-model="model.name" label="Name" hint="Name it anything you like ;)">
       <template v-slot:prepend>
         <q-icon name="i-hugeicons-heading-01" />
       </template>
@@ -29,7 +24,66 @@
       </template>
     </q-input>
 
-    <separator class="text-lg mt-5">Settings</separator>
+    <separator class="text-lg mt-5">Attachements</separator>
+
+    <div class="flex gap-2 items-start flex-nowrap">
+      <q-img :src="iconUrl" spinner-color="white" width="68px" height="68px" />
+      <q-file
+        clearable
+        filled
+        bottom-slots
+        use-chips
+        v-model="iconFile"
+        label="Icon"
+        counter
+        class="flex-1 max-w-[100%]"
+      >
+        <template v-slot:prepend>
+          <q-icon name="attach_file" />
+        </template>
+        <template v-slot:file="{ index, file }">
+          <q-chip
+            color="primary"
+            class="text-white max-w-[80%] overflow-hidden"
+            @remove="iconFile.value = undefined"
+            >{{ file.name.substring(file.name.length - 15, file.name.length) }}</q-chip
+          >
+        </template>
+
+        <template v-slot:hint>Replace your vehicle's icon image</template>
+      </q-file>
+      <q-btn
+        @click="$emit('uploadIcon', iconFile)"
+        unelevated
+        :disable="!iconFile"
+        color="primary"
+        icon="i-hugeicons-cloud-upload"
+        class="min-h-[68px]"
+        >Upload</q-btn
+      >
+    </div>
+
+    <separator class="text-lg mt-5">Miscellaneous Settings</separator>
+
+    <q-input
+      filled
+      v-model="model.setting_color"
+      :rules="['anyColor']"
+      label="Primary Color"
+      hint="Select the theme primary color"
+      class="my-input"
+    >
+      <template v-slot:prepend>
+        <div class="w-[24px] h-[24px] rounded-full" :style="`background-color: ${model.setting_color};`"></div>
+      </template>
+      <template v-slot:append>
+        <q-icon name="colorize" class="cursor-pointer">
+          <q-popup-proxy cover transition-show="scale" transition-hide="scale">
+            <q-color v-model="model.setting_color" />
+          </q-popup-proxy>
+        </q-icon>
+      </template>
+    </q-input>
 
     <q-input
       filled
@@ -69,12 +123,20 @@
 import { useVehicles } from '@/composables/vehicles'
 import type { Vehicle } from '@/types'
 
-import Separator from '@/components/Separator.vue';
+import Separator from '@/components/Separator.vue'
+import { computed, ref } from 'vue'
 
-const { settings } = useVehicles()
+const { settings, getThumbnail } = useVehicles()
 const model = defineModel<Partial<Vehicle>>({ required: true })
 
-defineEmits(['submit', 'cancel'])
+const iconFile = ref()
+const iconUrl = computed(() => {
+  if (iconFile.value) {
+    return URL.createObjectURL(iconFile.value)
+  }
+  return getThumbnail(model.value as any)
+})
+defineEmits(['submit', 'cancel', 'uploadIcon'])
 </script>
 
 <style lang="css" scoped>

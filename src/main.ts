@@ -14,6 +14,7 @@ import '@quasar/extras/ionicons-v4/ionicons-v4.css'
 
 const app = createApp(App)
 
+const color = localStorage.getItem('primary-color') ?? '#5e44ff'
 app.use(Quasar, {
   plugins: {
     LoadingBar,
@@ -21,11 +22,14 @@ app.use(Quasar, {
   },
   config: {
     brand: {
-      primary: '#5e44ff',
+      primary: color,
       secondary: '#0d0924',
       // dark: '#0d0924',
       negative: '#9b1c31',
     },
+    notify: {
+      position: 'top',
+    }
   }
 })
 

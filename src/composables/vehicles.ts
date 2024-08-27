@@ -2,7 +2,7 @@ import { useLocalStorage } from '@vueuse/core'
 import PocketBase from 'pocketbase'
 
 import type { CreateFuelEntry, FuelEntry, PbFetchError, Vehicle } from '../types'
-import { computed, ref } from 'vue'
+import { computed, handleError, ref } from 'vue'
 import { useQuasar } from 'quasar'
 import { useApi } from '@/composables/api'
 
@@ -203,6 +203,20 @@ export const useVehicles = () => {
     }
   })
 
+  async function uploadThumbnail(vehicleId: string, imageFile: any) {
+    const formData = new FormData();
+    formData.append('icon', imageFile)
+    try {
+      const updatedVehicle = await pb.collection<Vehicle>('vehicles').update(vehicleId, formData)
+      updateVehicle(updatedVehicle)
+      $q.notify({
+        type: 'positive',
+        message: 'Vehicle icon updated.',
+      })
+    } catch (err: unknown) {
+      errorNotify(err)
+    }
+  }
   
   function getThumbnail(li: Vehicle) {
     return `/api/files/${li.collectionId}/${li.id}/${li.icon}?thumb=128x128`
@@ -225,5 +239,6 @@ export const useVehicles = () => {
     removeFuelEntry,
     addFuelEntry,
     getThumbnail,
+    uploadThumbnail,
   }
 }
