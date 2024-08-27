@@ -169,4 +169,12 @@ const toggleRightDrawer = () => {
   opacity: 0;
 }
 
+body::-webkit-scrollbar {
+  width: 0px;
+}
+
+body::-webkit-scrollbar-thumb {
+  background-color: v-bind('primaryColor');
+}
+
 </style>

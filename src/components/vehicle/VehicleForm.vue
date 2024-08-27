@@ -24,6 +24,25 @@
       </template>
     </q-input>
 
+    <separator class="text-lg mt-5">Purchase</separator>
+    <q-input filled v-model="model.purchased" type="date" label="Date" hint="Date the vehicle was purchased on">
+      <template v-slot:prepend>
+        <q-icon name="i-hugeicons-calendar-01" />
+      </template>
+    </q-input>
+
+    <q-input filled v-model="model.purchased_price" type="number" label="Price" hint="Price the vehicle was purchased for">
+      <template v-slot:prepend>
+        <q-icon name="i-hugeicons-dollar-01" />
+      </template>
+    </q-input>
+
+    <q-input filled v-model="model.purchased_odometer" type="number" label="Odometer" hint="Car's mileage when purchased">
+      <template v-slot:prepend>
+        <q-icon name="speed" />
+      </template>
+    </q-input>
+
     <separator class="text-lg mt-5">Attachements</separator>
 
     <div class="flex gap-2 items-start flex-nowrap">
