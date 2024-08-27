@@ -32,7 +32,7 @@
     </card>
 
     <div class="home-grid">
-      <vehicle-avg-consumption-card title="last average" :entries="[lastEntry]" />
+      <vehicle-avg-consumption-card title="last average" :entries="lastEntry" />
       <vehicle-avg-consumption-card title="year average" :entries="thisYear" />
       <vehicle-avg-consumption-card title="all time avg" :entries="fuelEntries" />
 
@@ -74,7 +74,13 @@ if (!selectedVehicle.value) {
 }
 
 const fuelEntries = computed<FuelEntry[]>(() => selectedVehicle.value?.expand?.fuel_entries ?? [])
-const lastEntry = computed(() => fuelEntries.value.filter(e => e.average).sort((a, b) => a.odometer - b.odometer).reduce((prev, curr) => curr))
+const lastEntry = computed(() => {
+  const sorted = fuelEntries.value.filter(e => e.average).sort((a, b) => a.odometer - b.odometer)
+  if (sorted.length > 0) {
+    return [sorted[0]]
+  }
+  return []
+})
 const thisYear = computed(() => fuelEntries.value.filter(item => new Date(item.refueled).getUTCFullYear() === new Date().getUTCFullYear()))
 </script>
 

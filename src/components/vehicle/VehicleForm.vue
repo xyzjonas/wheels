@@ -24,7 +24,7 @@
       </template>
     </q-input>
 
-    <separator class="text-lg mt-5">Purchase</separator>
+    <separator class="text-lg mt-10">Purchase</separator>
     <q-input filled v-model="model.purchased" type="date" label="Date" hint="Date the vehicle was purchased on">
       <template v-slot:prepend>
         <q-icon name="i-hugeicons-calendar-01" />
@@ -43,7 +43,7 @@
       </template>
     </q-input>
 
-    <separator class="text-lg mt-5">Attachements</separator>
+    <separator class="text-lg mt-10">Attachements</separator>
 
     <div class="flex gap-2 items-start flex-nowrap">
       <q-img :src="iconUrl" spinner-color="white" width="68px" height="68px" />
@@ -82,7 +82,7 @@
       >
     </div>
 
-    <separator class="text-lg mt-5">Miscellaneous Settings</separator>
+    <separator class="text-lg mt-10">Miscellaneous Settings</separator>
 
     <q-input
       filled

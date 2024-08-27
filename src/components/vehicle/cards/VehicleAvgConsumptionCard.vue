@@ -37,6 +37,10 @@ const avg = computed(() => {
     return (avg + currentItem.average) / 2
   }, 0)
 
+  if (avg === 0) {
+    return 'N/A'
+  }
+
   return round(avg, 2)
 })
 
