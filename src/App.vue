@@ -1,6 +1,6 @@
 <template>
   <q-layout ref="body" view="hHh lpR fFf">
-    <q-header class="bg-primary text-white p-2 flex">
+    <!-- <q-header class="bg-primary text-white p-2 flex">
       <q-btn
         v-if="$q.screen.lt.md"
         flat
@@ -12,7 +12,7 @@
         <q-icon name="i-hugeicons-arrow-left-double"></q-icon> MENU
       </div>
     </q-btn>
-    </q-header>
+    </q-header> -->
     <!-- <q-header class="bg-primary text-white p-2">
       <q-toolbar>
         <q-toolbar-title>
@@ -157,9 +157,6 @@ const { isSwiping, direction } = useSwipe(body)
 watch(isSwiping, () => {
   if (direction.value === 'left') {
     rightDrawerOpen.value = true
-  }
-  if (direction.value === 'right') {
-    rightDrawerOpen.value = false
   }
 })
 

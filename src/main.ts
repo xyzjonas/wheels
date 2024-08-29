@@ -25,7 +25,8 @@ app.use(Quasar, {
       primary: color,
       secondary: '#0d0924',
       // dark: '#0d0924',
-      negative: '#9b1c31',
+      negative: '#da3633',
+      positive: '#1f883d',
     },
     notify: {
       position: 'bottom-left',

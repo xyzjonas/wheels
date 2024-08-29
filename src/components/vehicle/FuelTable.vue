@@ -2,11 +2,9 @@
   <q-table
     title="Refueling History"
     flat
-    :dense="$q.screen.lt.md"
     no-data-label="No refueling history found"
     :hide-pagination="summary"
     :rows="entries"
-    @row-click="(evt, row, index) => $emit('row-click', row.id)"
     :pagination="pagination"
     :columns="fuelColumns"
     row-key="name"
@@ -47,13 +45,19 @@
         <q-btn dense flat icon="i-hugeicons-more-vertical">
           <q-menu v-model="props.row.showMenu">
             <q-list>
-              <q-item clickable v-close-popup @click="$emit('toEdit', props.row.id)">
+              <q-item clickable v-close-popup @click="props.row.showMenu = false; $emit('toDetail', props.row.id)">
+                <q-item-section class="flex flex-row gap-3 items-center justify-start no-wrap">
+                  <q-icon name="i-hugeicons-view" />
+                  Detail
+                </q-item-section>
+              </q-item>
+              <q-item clickable v-close-popup @click="props.row.showMenu = false; $emit('toEdit', props.row.id)">
                 <q-item-section class="flex flex-row gap-3 items-center justify-start no-wrap">
                   <q-icon name="i-hugeicons-edit-02" />
                   Edit
                 </q-item-section>
               </q-item>
-              <q-item clickable v-close-popup class="w-fit text-negative" @click="$emit('delete', props.row.id)">
+              <q-item clickable v-close-popup class="w-fit text-negative" @click="props.row.showMenu = false; $emit('delete', props.row.id)">
                 <q-item-section class="flex flex-row gap-3 items-center justify-start no-wrap">
                   <q-icon name="i-hugeicons-delete-02" />
                   Delete
@@ -78,7 +82,7 @@ const props = defineProps<{
   summary?: boolean,
 }>()
 
-defineEmits(['toFuelView', 'addEntry', 'toEdit', 'delete', 'recompute', 'row-click'])
+defineEmits(['toFuelView', 'addEntry', 'toEdit', 'toDetail', 'delete', 'recompute'])
 
 const pagination = computed(() => {
   return {
@@ -131,7 +135,7 @@ const fuelColumns = computed<QTableColumn[]>(() => {
     {
       field: 'odometer',
       name: 'odometer',
-      label: $q.screen.gt.sm ? 'Odometer' : 'Odo.',
+      label: 'Odometer',
       format: (val: number) => `${val} ${settings.value.units.dist.short}`,
       align: 'left',
       sortable: true
@@ -153,15 +157,16 @@ const fuelColumns = computed<QTableColumn[]>(() => {
       format: formatCurrency,
       align: 'right'
     })
+
+    columns.push({
+      field: 'price',
+      name: 'price',
+      label: $q.screen.gt.sm ? 'Total Price' : 'Total',
+      format: formatCurrency,
+      align: 'right'
+    })
   }
 
-  columns.push({
-    field: 'price',
-    name: 'price',
-    label: $q.screen.gt.sm ? 'Total Price' : 'Total',
-    format: formatCurrency,
-    align: 'right'
-  })
 
   if (!props.summary) {
     columns.push({

@@ -1,7 +1,7 @@
 <template>
-  <div ref="page">
+  <main class="p-2 flex-1 flex flex-col">
     <refuel-form v-model="newEntry" :last-odometer="lastOdo" @submit="submit" @cancel="goBack"></refuel-form>
-  </div>
+  </main>
 </template>
 
 <script setup lang="ts">

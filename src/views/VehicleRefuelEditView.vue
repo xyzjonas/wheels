@@ -1,13 +1,12 @@
 <template>
-  <div>
+  <main v-if="fuelEntry" class="p-2 flex-1 flex flex-col">
     <refuel-form
       v-if="fuelEntry"
       v-model="fuelEntry"
       @submit="submit"
       @cancel="goBack"
     ></refuel-form>
-    <div v-else>NO SUCH ENTRY!</div>
-  </div>
+  </main>
 </template>
 
 <script setup lang="ts">
@@ -20,8 +19,8 @@ import { date } from 'quasar'
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
-const { getVehicleOrRouteAway, vehicleId, refuleItemId } = useRoutingGuard()
-getVehicleOrRouteAway()
+const { getRefuelItemOrRouteAway, vehicleId, refuleItemId } = useRoutingGuard()
+getRefuelItemOrRouteAway()
 
 const newEntry = ref<Partial<FuelEntry>>({
   full_tank: true,

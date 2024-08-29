@@ -1,5 +1,5 @@
 <template>
-  <main v-if="selectedVehicle" class="p-2 max-w-[100%]">
+  <main v-if="selectedVehicle" class="p-2 flex-1 flex flex-col">
     <hero-card title="Fuel Report" class="mb-5">
       <div class="text-white text-lg uppercase">{{ selectedVehicle.name }}</div>
       <div>{{ selectedVehicle.model }}</div>
@@ -9,9 +9,9 @@
       :entries="fuelEntries"
       @add-entry="toNewEntry"
       @to-edit="toEditView"
+      @to-detail="toRefuelEntryView"
       @delete="onDelete"
       @recompute="recompute"
-      @row-click="toRefuelEntryView"
     />
 
     <q-dialog v-model="showDeleteDialog" position="bottom">
