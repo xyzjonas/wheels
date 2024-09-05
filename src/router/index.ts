@@ -3,11 +3,12 @@ import VehicleHomeView from '../views/VehicleHomeView.vue'
 import VehiclesGridView from '@/views/VehiclesGridView.vue'
 import VehicleFuelView from '@/views/VehicleFuelView.vue'
 import VehicleMaintenanceView from '@/views/VehicleMaintenanceView.vue'
-import VehicleRefuelView from '@/views/VehicleRefuelView.vue'
 import Root from '@/views/Root.vue'
 import VehicleEditView from '@/views/VehicleEditView.vue'
+import VehicleRefuelCreateView from '@/views/VehicleRefuelCreateView.vue'
+import VehicleRefuelDetailView from '@/views/VehicleRefuelDetailView.vue'
 import VehicleRefuelEditView from '@/views/VehicleRefuelEditView.vue'
-import VehicleFuelEntryView from '@/views/VehicleFuelEntryView.vue'
+import VehicleCalculatorView from '@/views/VehicleCalculatorView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -30,12 +31,12 @@ const router = createRouter({
     {
       path: '/vehicles/:id/fuel/:refuelId',
       name: 'vehicle-fuel-detail',
-      component: VehicleFuelEntryView,
+      component: VehicleRefuelDetailView,
     },
     {
       path: '/vehicles/:id/fuel/add',
       name: 'vehicle-refuel',
-      component: VehicleRefuelView,
+      component: VehicleRefuelCreateView,
     },
     {
       path: '/vehicles/:id/fuel/:refuelId/edit',
@@ -51,6 +52,11 @@ const router = createRouter({
       path: '/vehicles/:id/maintenance',
       name: 'vehicle-maintenance',
       component: VehicleMaintenanceView,
+    },
+    {
+      path: '/vehicles/:id/calculator',
+      name: 'vehicle-calculator',
+      component: VehicleCalculatorView,
     },
     {
       path: '/vehicles/:id',

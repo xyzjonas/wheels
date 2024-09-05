@@ -120,6 +120,13 @@ const listItems = computed(() => {
         click: () =>
           router.push({ name: 'vehicle-edit', params: { id: selectedVehicle.value?.id } }),
         active: router.currentRoute.value.name === 'vehicle-edit'
+      },
+      {
+        label: 'Cost Calculator',
+        icon: 'i-hugeicons-calculator-01',
+        click: () =>
+          router.push({ name: 'vehicle-calculator', params: { id: selectedVehicle.value?.id } }),
+        active: router.currentRoute.value.name === 'vehicle-calculator'
       }
     )
   }

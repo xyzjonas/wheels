@@ -26,7 +26,7 @@
         unelevated
         flat
         color="primary"
-        label="re-calculate averages"
+        label="re-calculate"
         class="ml-auto"
         @click="$emit('recompute')"
       />
@@ -34,7 +34,7 @@
         icon="i-hugeicons-row-insert"
         unelevated
         color="primary"
-        label="new entry"
+        label="add"
         class="ml-auto"
         @click="$emit('addEntry')"
         />
