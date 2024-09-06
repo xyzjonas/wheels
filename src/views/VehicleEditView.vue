@@ -1,10 +1,9 @@
 <template>
   <main v-if="selectedVehicle" class="p-2 flex-1 flex flex-col">
-    <hero-card title="Edit Vehicle" class="mb-5">
+    <hero-card title="Vehicle Settings" class="mb-5">
       <div class="text-white text-lg uppercase">{{selectedVehicle.name}}</div>
       <div>{{ selectedVehicle.model }}</div>
     </hero-card>
-    {{ vehicle.purchased }}
     <vehicle-form v-model="vehicle" @submit="submit" @cancel="goBack" @upload-icon="uploadIcon" class="flex-1"/>
   </main>
 </template>

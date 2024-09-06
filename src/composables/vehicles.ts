@@ -1,7 +1,7 @@
 import { useLocalStorage } from '@vueuse/core'
 import PocketBase from 'pocketbase'
 
-import type { CreateFuelEntry, FuelEntry, PbFetchError, Vehicle } from '../types'
+import type { CreateFuelEntry, CreateMaintenanceEntry, FuelEntry, MaintenanceEntry, PbFetchError, Vehicle } from '../types'
 import { computed, handleError, ref } from 'vue'
 import { useQuasar } from 'quasar'
 import { useApi } from '@/composables/api'
@@ -33,7 +33,7 @@ export const useVehicles = () => {
     try {
       vehicles.value = await pb
         .collection<Vehicle>('vehicles')
-        .getFullList({ expand: 'fuel_entries' })
+        .getFullList({ expand: 'fuel_entries,maintenance_entries' })
       
       if (isOffline.value) {
         isOffline.value = false
@@ -129,7 +129,6 @@ export const useVehicles = () => {
     }
   }
 
-
   async function removeFuelEntry(vehicleId: string, entryId: string) {
     try {
       await pb.collection<FuelEntry>('fuel_entries').delete(entryId)
@@ -145,6 +144,61 @@ export const useVehicles = () => {
       $q.notify({
         type: 'positive',
         message: 'Fuel entry removed.',
+      })
+
+    } catch(err: any) {
+      errorNotify(err)
+    }
+  }
+
+
+  async function addMaintenanceEntry(vehicleId: string, entry: CreateMaintenanceEntry) {
+    const newEntry = JSON.parse(JSON.stringify(entry))
+    try {
+      newEntry.date = new Date(newEntry.date).toUTCString()
+
+      const res = await pb.collection<FuelEntry>('maintenance_entries').create(newEntry)
+      const updatedVehicle = await pb.collection<Vehicle>('vehicles').update(vehicleId, {
+        'maintenance_entries+': res.id,
+      }, {
+        expand: 'fuel_entries,maintenance_entries'
+      })
+
+      updateVehicle(updatedVehicle)
+
+      $q.notify({
+        type: 'positive',
+        message: 'New maintenance entry added.',
+      })
+
+    } catch(err: any) {
+      errorNotify(err)
+    }
+  }
+
+  async function editMaintenanceEntry(vehicleId: string, entryId: string, entry: CreateMaintenanceEntry) {
+    const newEntry = JSON.parse(JSON.stringify(entry))
+    try {
+      newEntry.date = new Date(newEntry.date).toUTCString()
+
+      const updatedItem = await pb.collection<MaintenanceEntry>('maintenance_entries').update(entryId, newEntry)
+
+      vehicles.value.forEach(veh => {
+        if (veh.id === vehicleId) {
+          if (veh.expand?.maintenance_entries) {
+            veh.expand.maintenance_entries = veh.expand?.maintenance_entries.map(oldItem => {
+              if (oldItem.id === updatedItem.id) {
+                return updatedItem;
+              }
+              return oldItem
+            })
+          }
+        }
+      })
+
+      $q.notify({
+        type: 'positive',
+        message: 'Maintenance entry updated.',
       })
 
     } catch(err: any) {
@@ -242,5 +296,7 @@ export const useVehicles = () => {
     addFuelEntry,
     getThumbnail,
     uploadThumbnail,
+    addMaintenanceEntry,
+    editMaintenanceEntry,
   }
 }

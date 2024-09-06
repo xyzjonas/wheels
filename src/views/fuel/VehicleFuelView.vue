@@ -1,11 +1,11 @@
 <template>
   <main v-if="selectedVehicle" class="p-2 flex-1 flex flex-col">
-    <hero-card title="Fuel Report" class="mb-5">
+    <hero-card title="Fuel Report" class="mb-3">
       <div class="text-white text-lg uppercase">{{ selectedVehicle.name }}</div>
       <div>{{ selectedVehicle.model }}</div>
     </hero-card>
 
-    <div class="flex w-full gap-2 items-stretch flex-wrap">
+    <div class="flex w-full gap-2 items-stretch flex-wrap mb-3">
       <vehicle-value-card
         :title="`Last Price per ${settings.units.vol.short}`"
         :value="latestEntry?.price_per_unit ?? 'N/A'"

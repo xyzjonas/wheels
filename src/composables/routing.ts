@@ -8,6 +8,7 @@ export const useRoutingGuard = () => {
   const router = useRouter()
   const vehicleId = computed<string>(() => router.currentRoute.value.params.id as string)
   const refuleItemId = computed<string>(() => router.currentRoute.value.params.refuelId as string)
+  const maintenanceId = computed<string>(() => router.currentRoute.value.params.maintenanceId as string)
 
 
   const toVehicles = () => router.push({ name: 'vehicles' })
@@ -45,12 +46,35 @@ export const useRoutingGuard = () => {
 
   }
 
+  const getMaintenanceItemOrRouteAway = () => {
+    if (!selectedVehicle.value) {
+      toVehicles()
+      return
+    }
+
+    const entries = selectedVehicle.value?.expand?.maintenance_entries ?? []
+
+    if (entries.length <= 0 || !maintenanceId.value) {
+      console.debug('no id')
+      toHome(selectedVehicle.value.id)
+      return
+    }
+
+    const match = entries.find(e => e.id === maintenanceId.value)
+    if (!match) {
+      toHome(selectedVehicle.value.id)
+    }
+
+  }
+
 
 
   return {
     vehicleId,
     refuleItemId,
+    maintenanceId,
     getVehicleOrRouteAway,
-    getRefuelItemOrRouteAway
+    getRefuelItemOrRouteAway,
+    getMaintenanceItemOrRouteAway,
   }
 }

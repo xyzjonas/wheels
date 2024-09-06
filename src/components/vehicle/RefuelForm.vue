@@ -7,6 +7,7 @@
       :landscape="$q.screen.gt.sm"
       emit-immediately
       class="w-full"
+      :readonly="readonly"
     />
     <q-input
       filled

@@ -16,6 +16,22 @@ export interface FuelEntry extends Base {
   average?: number
 }
 
+export type Category = "maintenance" | "service" | "tax" | "reminder_check"
+
+export interface MaintenanceEntry extends Base {
+  date: string
+  odometer: number
+  price: number
+  description: string
+  body: string
+  attachements: string[]
+  category: Category
+}
+
+export interface CreateMaintenanceEntry
+  extends Omit<MaintenanceEntry, 'id' | 'created' | 'updated' | 'collectionId'> {}
+
+
 export type SettingMeasurement = 'metric' | 'imperial'
 export type SettingCurrencyPosition = 'before' | 'after'
 
@@ -29,8 +45,10 @@ export interface Vehicle extends Base {
   vin: string
   icon: string
   fuel_entries: string[]
+  maintenance_entries: string[],
   expand?: {
-    fuel_entries: FuelEntry[]
+    fuel_entries: FuelEntry[],
+    maintenance_entries: MaintenanceEntry[],
   }
   purchased: string
   purchased_price: number
