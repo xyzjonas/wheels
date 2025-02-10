@@ -4,8 +4,8 @@
     @click="router.push({ name: 'vehicle-maintenance', params: { id: vehicle.id } })"
     fit="cover"
     height="100%"
-    class="border-rd-[4px] hover:cursor-pointer"
-    src="https://theosautomotive.com.au/images/slider/engine_maintenance.jpg"
+    class="border-rd-[4px] hover:cursor-pointer saturate-[0.4]"
+    src="@/assets/maintenance.png"
     >
     <div class="p-2 w-full h-full">
       <q-icon name="i-hugeicons-check-list" class="text-xl"></q-icon>

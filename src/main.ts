@@ -10,7 +10,7 @@ import 'virtual:uno.css'
 
 // Import icon libraries
 import '@quasar/extras/material-icons/material-icons.css'
-import '@quasar/extras/ionicons-v4/ionicons-v4.css'
+// import '@quasar/extras/ionicons-v4/ionicons-v4.css'
 
 const app = createApp(App)
 
@@ -25,8 +25,8 @@ app.use(Quasar, {
       primary: color,
       secondary: '#0d0924',
       // dark: '#0d0924',
-      negative: '#da3633',
-      positive: '#1f883d',
+      negative: '#f44336',
+      positive: '#81c784',
     },
     notify: {
       position: 'bottom-left',

@@ -1,7 +1,7 @@
 <template>
   <vehicle-value-card
     :title="title ?? 'average consumption'"
-    icon="i-hugeicons-fuel-station"
+    icon="water_drop"
     :value="avg"
     :unit="settings.units.consumption.short"
   />

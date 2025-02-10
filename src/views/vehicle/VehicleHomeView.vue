@@ -1,28 +1,5 @@
 <template>
   <main v-if="selectedVehicle" class="p-2">
-    <hero-card :title="selectedVehicle.name">
-      <div class="text-white mb-5">{{ selectedVehicle.model }}</div>
-      <div class="flex justify-between">
-        <div>
-          <div class="text-xs text-secondary">VIN</div>
-          <div class="text-white flex items-center gap-2 uppercase">
-            {{ selectedVehicle.vin }}
-            <q-btn dense rounded color="secondary" unelevated>
-              <div class="block content-center w-6 h-6">
-                <q-icon name="i-hugeicons-copy-02" size="14px"></q-icon>
-              </div>
-            </q-btn>
-          </div>
-        </div>
-        <div>
-          Registration Number
-          <div class="text-white flex items-center gap-2 uppercase">
-            {{ selectedVehicle.registration }}
-          </div>
-        </div>
-      </div>
-    </hero-card>
-
     <card class="my-3">
       <fuel-table
         :entries="fuelEntries"
@@ -47,7 +24,7 @@
         title="driven since purchase"
         :subtitle="`Owned since ${ownedSince}`"
         :value="drivenTotal"
-        icon="i-hugeicons-road"
+        icon="speedometer"
         :unit="settings.units.dist.long"
       />
 

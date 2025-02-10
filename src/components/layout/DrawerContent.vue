@@ -4,7 +4,7 @@
     separator
     style="height: calc(100% - 90px); margin-top: 90px; border-right: 1px solid #ddd"
   >
-    <q-item v-for="item in listItems" clickable v-ripple @click="item.click" :active="item.active">
+    <q-item v-for="item in listItems" :key="item.label" clickable v-ripple @click="item.click" :active="item.active">
       <q-item-section avatar>
         <q-icon :name="item.icon" />
       </q-item-section>
@@ -20,14 +20,14 @@
       :active="router.currentRoute.value.name === 'vehicles'"
     >
       <q-item-section avatar>
-        <q-icon name="ion-car" />
+        <q-icon name="commute" />
       </q-item-section>
       <q-item-section>All Vehicles</q-item-section>
     </q-item>
 
     <q-item clickable v-ripple @click="toggle">
       <q-item-section avatar>
-        <q-icon :name="isDark ? 'ion-sunny' : 'ion-moon'" />
+        <q-icon :name="isDark ? 'light_mode' : 'dark_mode'" />
       </q-item-section>
       <q-item-section>{{ isDark ? 'Light' : 'Dark' }} Mode</q-item-section>
     </q-item>
@@ -40,7 +40,7 @@
     </q-item> -->
     <q-item class="text-xs text-gray">
       <q-item-section class="flex flex-row items-end gap-2">
-          <q-icon name="ion-hammer" class="ml-auto" />
+          <q-icon name="build" class="ml-auto" />
           <span>version {{ version }}</span>
       </q-item-section>
     </q-item>
@@ -95,35 +95,35 @@ const listItems = computed(() => {
     items.push(
       {
         label: 'Overview',
-        icon: 'ion-home',
+        icon: 'home',
         click: () =>
           router.push({ name: 'vehicle-home', params: { id: selectedVehicle.value?.id } }),
         active: router.currentRoute.value.name === 'vehicle-home'
       },
       {
         label: 'Fuel',
-        icon: 'i-hugeicons-fuel-station',
+        icon: 'water_drop',
         click: () =>
           router.push({ name: 'vehicle-fuel', params: { id: selectedVehicle.value?.id } }),
         active: router.currentRoute.value.name === 'vehicle-fuel'
       },
       {
         label: 'Maintenance',
-        icon: 'ion-build',
+        icon: 'plumbing',
         click: () =>
           router.push({ name: 'vehicle-maintenance', params: { id: selectedVehicle.value?.id } }),
         active: router.currentRoute.value.name === 'vehicle-maintenance'
       },
       {
         label: 'Vehicle Settings',
-        icon: 'i-hugeicons-settings-02',
+        icon: 'settings',
         click: () =>
           router.push({ name: 'vehicle-edit', params: { id: selectedVehicle.value?.id } }),
         active: router.currentRoute.value.name === 'vehicle-edit'
       },
       {
         label: 'Cost Calculator',
-        icon: 'i-hugeicons-calculator-01',
+        icon: 'calculate',
         click: () =>
           router.push({ name: 'vehicle-calculator', params: { id: selectedVehicle.value?.id } }),
         active: router.currentRoute.value.name === 'vehicle-calculator'
@@ -133,10 +133,6 @@ const listItems = computed(() => {
 
   return items
 })
-
-function toAdmin() {
-  window.location.href = '/_/';
-}
 </script>
 
 <style lang="css" scoped></style>

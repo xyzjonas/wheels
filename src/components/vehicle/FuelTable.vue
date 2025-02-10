@@ -11,7 +11,7 @@
   >
     <template v-if="summary" v-slot:bottom>
       <q-btn
-        icon="i-hugeicons-arrow-right-03"
+        icon="local_gas_station"
         dense
         flat
         label="see all"

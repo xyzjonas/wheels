@@ -6,7 +6,7 @@
         <div class="self-center text-xl">
           <q-icon :name="icon" class="self-baseline"></q-icon>
         </div>
-        <div class="value self-start">{{ value }}</div>
+        <div class="value self-start">{{ value.toLocaleString() }}</div>
         <span v-if="unit" class="unit uppercase self-center">{{ unit }}</span>
       </div>
     </div>

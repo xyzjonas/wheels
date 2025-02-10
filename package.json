@@ -15,7 +15,6 @@
     "pwa-assets": "pwa-assets-generator --preset minimal-2023 public/logo.svg"
   },
   "dependencies": {
-    "@iconify-json/hugeicons": "^1.1.0",
     "@unocss/preset-icons": "^0.61.9",
     "@vueuse/core": "^10.11.0",
     "pocketbase": "^0.21.4",

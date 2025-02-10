@@ -4,7 +4,7 @@
       <div class="text-white text-lg uppercase">{{selectedVehicle.name}}</div>
       <div>{{ selectedVehicle.model }}</div>
     </hero-card>
-    <vehicle-form v-model="vehicle" @submit="submit" @cancel="goBack" @upload-icon="uploadIcon" class="flex-1"/>
+    <VehicleForm v-model="vehicle" @submit="submit" @cancel="goBack" @upload-icon="uploadIcon" class="flex-1"/>
   </main>
 </template>
 

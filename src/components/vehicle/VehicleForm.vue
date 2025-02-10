@@ -2,25 +2,25 @@
   <q-form @submit.prevent="$emit('submit', model)" class="h-full flex flex-col gap-3">
     <q-input filled v-model="model.vin" label="VIN" hint="VIN Number">
       <template v-slot:prepend>
-        <q-icon name="i-hugeicons-text-number-sign" />
+        <q-icon name="tag" />
       </template>
     </q-input>
 
     <q-input filled v-model="model.registration" label="Registration" hint="Registration Number">
       <template v-slot:prepend>
-        <q-icon name="i-hugeicons-task-edit-01" />
+        <q-icon name="app_registration" />
       </template>
     </q-input>
 
     <q-input filled v-model="model.name" label="Name" hint="Name it anything you like ;)">
       <template v-slot:prepend>
-        <q-icon name="i-hugeicons-heading-01" />
+        <q-icon name="label" />
       </template>
     </q-input>
 
     <q-input filled v-model="model.model" label="Model" hint="Vehicle brand and model">
       <template v-slot:prepend>
-        <q-icon name="i-hugeicons-car-04" />
+        <q-icon name="directions_car_filled" />
       </template>
     </q-input>
 
@@ -28,13 +28,13 @@
     
     <q-input filled v-model="model.purchased" type="date" label="Date" hint="Date the vehicle was purchased on">
       <template v-slot:prepend>
-        <q-icon name="i-hugeicons-calendar-01" />
+        <q-icon name="today" />
       </template>
     </q-input>
 
     <q-input filled v-model="model.purchased_price" type="number" label="Price" hint="Price the vehicle was purchased for">
       <template v-slot:prepend>
-        <q-icon name="i-hugeicons-dollar-01" />
+        <q-icon name="sell" />
       </template>
     </q-input>
 
@@ -112,7 +112,7 @@
       hint="Set an arbitrary currency label"
     >
       <template v-slot:prepend>
-        <q-icon name="i-hugeicons-dollar-02" />
+        <q-icon name="euro" />
       </template>
     </q-input>
 

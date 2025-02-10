@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import VehicleHomeView from '../views/VehicleHomeView.vue'
+import VehicleHomeView from '@/views/vehicle/VehicleHomeView.vue'
 import VehiclesGridView from '@/views/VehiclesGridView.vue'
 import VehicleFuelView from '@/views/fuel/VehicleFuelView.vue'
 import VehicleMaintenanceView from '@/views/maintenance/VehicleMaintenanceView.vue'
@@ -13,6 +13,7 @@ import VehicleMaintenanceCreateView from '@/views/maintenance/VehicleMaintenance
 import VehicleMaintenanceDetailView from '@/views/maintenance/VehicleMaintenanceDetailView.vue'
 import { useTitle } from '@vueuse/core'
 import VehicleMaintenanceEditView from '@/views/maintenance/VehicleMaintenanceEditView.vue'
+import BaseView from '@/views/vehicle/BaseView.vue'
 
 const pageTitle = useTitle()
 
@@ -33,6 +34,21 @@ const router = createRouter({
       component: VehiclesGridView,
       meta: {
         title: "Vehicles"
+      }
+    },
+    {
+      path: '/vehicles/:id',
+      component: BaseView,
+      props: true,
+      children: [
+        {
+          path: '',
+          name: 'vehicle-home',
+          component: VehicleHomeView,
+        }
+      ],
+      meta: {
+        title: "Home"
       }
     },
     {
@@ -113,14 +129,6 @@ const router = createRouter({
       component: VehicleCalculatorView,
       meta: {
         title: "Calculator"
-      }
-    },
-    {
-      path: '/vehicles/:id',
-      name: 'vehicle-home',
-      component: VehicleHomeView,
-      meta: {
-        title: "Home"
       }
     },
   ]
