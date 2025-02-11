@@ -1,10 +1,5 @@
 <template>
-  <main v-if="selectedVehicle" class="p-2 flex-1 flex flex-col">
-    <hero-card title="Fuel Report" class="mb-3">
-      <div class="text-white text-lg uppercase">{{ selectedVehicle.name }}</div>
-      <div>{{ selectedVehicle.model }}</div>
-    </hero-card>
-
+  <main v-if="selectedVehicle" class="flex-1 flex flex-col my-3">
     <div class="flex w-full gap-2 items-stretch flex-wrap mb-3">
       <vehicle-value-card
         :title="`Last Price per ${settings.units.vol.short}`"
@@ -27,10 +22,11 @@
         icon="i-hugeicons-calendar-03"
         class="top-card"
       />
+      <vehicle-avg-consumption-card title="all time avg" :entries="sorted" />
     </div>
 
     <fuel-table
-      :entries="fuelEntries"
+      :entries="sorted"
       @add-entry="toNewEntry"
       @to-edit="toEditView"
       @to-detail="toRefuelEntryView"
@@ -78,15 +74,14 @@
 
 <script setup lang="ts">
 import { useVehicles } from '@/composables/vehicles'
-import { computed, ref } from 'vue'
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
-import HeroCard from '@/components/HeroCard.vue'
 import FuelTable from '@/components/vehicle/FuelTable.vue'
 import VehicleValueCard from '@/components/vehicle/cards/VehicleValueCard.vue'
-import type { FuelEntry } from '@/types'
+import VehicleAvgConsumptionCard from '@/components/vehicle/cards/VehicleAvgConsumptionCard.vue'
 import { useRoutingGuard } from '@/composables/routing'
-import { round } from '@/utils/math'
+import { useVehicleCalculations } from '@/composables/vehicle'
 
 const router = useRouter()
 
@@ -107,7 +102,6 @@ const toEditView = (refuelItemId: string) => {
 }
 
 const toRefuelEntryView = (id: string) => {
-  console.info(id)
   router.push({
     name: 'vehicle-fuel-detail',
     params: { id: selectedVehicle.value?.id, refuelId: id }
@@ -134,10 +128,8 @@ const actualDelete = async () => {
   }
 }
 
-const fuelEntries = computed<FuelEntry[]>(() => selectedVehicle.value?.expand?.fuel_entries ?? [])
+const { avgCostPerDistance, avgCostPerDistanceYear, latestEntry, sorted } = useVehicleCalculations(selectedVehicle)
 
-const sorted = computed(() => fuelEntries.value.sort((a, b) => a.odometer - b.odometer))
-const latestEntry = computed(() => sorted.value[sorted.value.length - 1])
 const recomputing = ref(false)
 const itemsDone = ref(1)
 async function recompute() {
@@ -190,47 +182,47 @@ async function recompute() {
   }
 }
 
-const calculateAverageCostPerDistance = (data: FuelEntry[]) => {
-  let result = 0
+// const calculateAverageCostPerDistance = (data: FuelEntry[]) => {
+//   let result = 0
 
-  if (data.length <= 0) {
-    return 'N/A'
-  }
+//   if (data.length <= 0) {
+//     return 'N/A'
+//   }
 
-  data.reduce((prev: FuelEntry, current: FuelEntry) => {
+//   data.reduce((prev: FuelEntry, current: FuelEntry) => {
 
-    if (current.reset) {
-      return current
-    }
+//     if (current.reset) {
+//       return current
+//     }
 
-    const distanceDriven = current.odometer - prev.odometer
-    const price = current.price / distanceDriven
-    if (result === 0) {
-      result = price
-    } else {
-      result = (result + price) / 2
-    }
+//     const distanceDriven = current.odometer - prev.odometer
+//     const price = current.price / distanceDriven
+//     if (result === 0) {
+//       result = price
+//     } else {
+//       result = (result + price) / 2
+//     }
 
-    return current
-  })
+//     return current
+//   })
 
-  if (result === 0) {
-    return 'N/A'
-  }
+//   if (result === 0) {
+//     return 'N/A'
+//   }
 
-  return round(result, 2)
-}
+//   return round(result, 2)
+// }
 
-const avgCostPerDistance = computed(() => {
-  return calculateAverageCostPerDistance(sorted.value)
-})
+// const avgCostPerDistance = computed(() => {
+//   return calculateAverageCostPerDistance(sorted.value)
+// })
 
-const avgCostPerDistanceYear = computed(() => {
-  const thisYear = new Date().getUTCFullYear()
-  return calculateAverageCostPerDistance(
-    sorted.value.filter((entry) => new Date(entry.refueled).getUTCFullYear() === thisYear)
-  )
-})
+// const avgCostPerDistanceYear = computed(() => {
+//   const thisYear = new Date().getUTCFullYear()
+//   return calculateAverageCostPerDistance(
+//     sorted.value.filter((entry) => new Date(entry.refueled).getUTCFullYear() === thisYear)
+//   )
+// })
 </script>
 
 <style lang="css" scoped>

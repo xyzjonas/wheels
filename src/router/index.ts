@@ -1,19 +1,19 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import VehicleHomeView from '@/views/vehicle/VehicleHomeView.vue'
 import VehiclesGridView from '@/views/VehiclesGridView.vue'
-import VehicleFuelView from '@/views/fuel/VehicleFuelView.vue'
-import VehicleMaintenanceView from '@/views/maintenance/VehicleMaintenanceView.vue'
+import VehicleFuelView from '@/views/vehicle/VehicleFuelView.vue'
+import VehicleMaintenanceView from '@/views/vehicle/VehicleMaintenanceView.vue'
 import Root from '@/views/Root.vue'
-import VehicleEditView from '@/views/VehicleEditView.vue'
+import VehicleSettingsView from '@/views/vehicle/VehicleSettingsView.vue'
 import VehicleRefuelCreateView from '@/views/fuel/VehicleRefuelCreateView.vue'
 import VehicleRefuelDetailView from '@/views/fuel/VehicleRefuelDetailView.vue'
 import VehicleRefuelEditView from '@/views/fuel/VehicleRefuelEditView.vue'
-import VehicleCalculatorView from '@/views/VehicleCalculatorView.vue'
+import VehicleCalculatorView from '@/views/vehicle/VehicleCalculatorView.vue'
 import VehicleMaintenanceCreateView from '@/views/maintenance/VehicleMaintenanceCreateView.vue'
 import VehicleMaintenanceDetailView from '@/views/maintenance/VehicleMaintenanceDetailView.vue'
 import { useTitle } from '@vueuse/core'
 import VehicleMaintenanceEditView from '@/views/maintenance/VehicleMaintenanceEditView.vue'
-import BaseView from '@/views/vehicle/BaseView.vue'
+import VehicleBaseView from '@/views/vehicle/VehicleBaseView.vue'
 
 const pageTitle = useTitle()
 
@@ -25,7 +25,7 @@ const router = createRouter({
       name: 'home',
       component: Root,
       meta: {
-        title: "Home"
+        title: 'Home'
       }
     },
     {
@@ -33,38 +33,62 @@ const router = createRouter({
       name: 'vehicles',
       component: VehiclesGridView,
       meta: {
-        title: "Vehicles"
+        title: 'Vehicles'
       }
     },
     {
       path: '/vehicles/:id',
-      component: BaseView,
+      component: VehicleBaseView,
       props: true,
       children: [
         {
           path: '',
           name: 'vehicle-home',
           component: VehicleHomeView,
+          meta: {
+            title: 'Home'
+          }
+        },
+        {
+          path: '/vehicles/:id/fuel',
+          name: 'vehicle-fuel',
+          component: VehicleFuelView,
+          meta: {
+            title: 'Fuel'
+          }
+        },
+        {
+          path: '/vehicles/:id/maintenance',
+          name: 'vehicle-maintenance',
+          component: VehicleMaintenanceView,
+          meta: {
+            title: 'Maintenance'
+          }
+        },
+        {
+          path: '/vehicles/:id/edit',
+          name: 'vehicle-edit',
+          component: VehicleSettingsView,
+          meta: {
+            title: 'Edit'
+          }
+        },
+        {
+          path: '/vehicles/:id/calculator',
+          name: 'vehicle-calculator',
+          component: VehicleCalculatorView,
+          meta: {
+            title: 'Calculator'
+          }
         }
-      ],
-      meta: {
-        title: "Home"
-      }
-    },
-    {
-      path: '/vehicles/:id/fuel',
-      name: 'vehicle-fuel',
-      component: VehicleFuelView,
-      meta: {
-        title: "Fuel"
-      }
+      ]
     },
     {
       path: '/vehicles/:id/fuel/:refuelId',
       name: 'vehicle-fuel-detail',
       component: VehicleRefuelDetailView,
       meta: {
-        title: "Fuel Detail"
+        title: 'Fuel Detail'
       }
     },
     {
@@ -72,7 +96,7 @@ const router = createRouter({
       name: 'vehicle-refuel',
       component: VehicleRefuelCreateView,
       meta: {
-        title: "Refuel"
+        title: 'Refuel'
       }
     },
     {
@@ -80,23 +104,7 @@ const router = createRouter({
       name: 'vehicle-refuel-edit',
       component: VehicleRefuelEditView,
       meta: {
-        title: "Fuel Edit"
-      }
-    },
-    {
-      path: '/vehicles/:id/edit',
-      name: 'vehicle-edit',
-      component: VehicleEditView,
-      meta: {
-        title: "Edit"
-      }
-    },
-    {
-      path: '/vehicles/:id/maintenance',
-      name: 'vehicle-maintenance',
-      component: VehicleMaintenanceView,
-      meta: {
-        title: "Maintenance"
+        title: 'Fuel Edit'
       }
     },
     {
@@ -104,7 +112,7 @@ const router = createRouter({
       name: 'vehicle-maintenance-create',
       component: VehicleMaintenanceCreateView,
       meta: {
-        title: "New Maintenance"
+        title: 'New Maintenance'
       }
     },
     {
@@ -112,7 +120,7 @@ const router = createRouter({
       name: 'vehicle-maintenance-detail',
       component: VehicleMaintenanceDetailView,
       meta: {
-        title: "Maintenance Detail"
+        title: 'Maintenance Detail'
       }
     },
     {
@@ -120,22 +128,14 @@ const router = createRouter({
       name: 'vehicle-maintenance-edit',
       component: VehicleMaintenanceEditView,
       meta: {
-        title: "Maintenance Edit"
+        title: 'Maintenance Edit'
       }
-    },
-    {
-      path: '/vehicles/:id/calculator',
-      name: 'vehicle-calculator',
-      component: VehicleCalculatorView,
-      meta: {
-        title: "Calculator"
-      }
-    },
+    }
   ]
 })
 
 router.afterEach((to, from) => {
-  let title = "Wheels"
+  let title = 'Wheels'
   if (to.meta.title) {
     title += ` | ${to.meta.title}`
   }

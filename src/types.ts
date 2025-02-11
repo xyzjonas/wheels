@@ -68,3 +68,5 @@ export interface PbFetchError {
   stack: string
   message: string
 }
+
+export type RouteNames = "vehicles" | "vehicle-fuel" | "vehicle-home" | "vehicle-edit" | "vehicle-maintenance" | "home" | "vehicle-calculator"

@@ -25,20 +25,38 @@
     </q-input>
 
     <separator class="text-lg mt-10">Purchase</separator>
-    
-    <q-input filled v-model="model.purchased" type="date" label="Date" hint="Date the vehicle was purchased on">
+
+    <q-input
+      filled
+      v-model="model.purchased"
+      type="date"
+      label="Date"
+      hint="Date the vehicle was purchased on"
+    >
       <template v-slot:prepend>
         <q-icon name="today" />
       </template>
     </q-input>
 
-    <q-input filled v-model="model.purchased_price" type="number" label="Price" hint="Price the vehicle was purchased for">
+    <q-input
+      filled
+      v-model="model.purchased_price"
+      type="number"
+      label="Price"
+      hint="Price the vehicle was purchased for"
+    >
       <template v-slot:prepend>
         <q-icon name="sell" />
       </template>
     </q-input>
 
-    <q-input filled v-model="model.purchased_odometer" type="number" label="Odometer" hint="Car's mileage when purchased">
+    <q-input
+      filled
+      v-model="model.purchased_odometer"
+      type="number"
+      label="Odometer"
+      hint="Car's mileage when purchased"
+    >
       <template v-slot:prepend>
         <q-icon name="speed" />
       </template>
@@ -77,10 +95,10 @@
         unelevated
         :disable="!iconFile"
         color="primary"
-        icon="i-hugeicons-cloud-upload"
+        icon="upload_file"
         class="min-h-[68px]"
-        >Upload</q-btn
-      >
+        label="upload"
+      />
     </div>
 
     <separator class="text-lg mt-10">Miscellaneous Settings</separator>
@@ -94,7 +112,10 @@
       class="my-input"
     >
       <template v-slot:prepend>
-        <div class="w-[24px] h-[24px] rounded-full" :style="`background-color: ${model.setting_color};`"></div>
+        <div
+          class="w-[24px] h-[24px] rounded-full"
+          :style="`background-color: ${model.setting_color};`"
+        ></div>
       </template>
       <template v-slot:append>
         <q-icon name="colorize" class="cursor-pointer">
@@ -146,7 +167,7 @@ import type { Vehicle } from '@/types'
 import Separator from '@/components/Separator.vue'
 import { computed, ref } from 'vue'
 
-const { settings, getThumbnail } = useVehicles()
+const { getThumbnail } = useVehicles()
 const model = defineModel<Partial<Vehicle>>({ required: true })
 
 const iconFile = ref()

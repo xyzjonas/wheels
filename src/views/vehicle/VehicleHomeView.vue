@@ -1,8 +1,8 @@
 <template>
-  <main v-if="selectedVehicle" class="p-2">
+  <main v-if="selectedVehicle">
     <card class="my-3">
       <fuel-table
-        :entries="fuelEntries"
+        :entries="sorted"
         summary
         @to-fuel-view="router.push({ name: 'vehicle-fuel', params: { id: selectedVehicle.id } })"
       ></fuel-table>
@@ -10,8 +10,22 @@
 
     <div class="home-grid">
       <vehicle-avg-consumption-card title="last average" :entries="lastEntry" />
-      <vehicle-avg-consumption-card title="year average" :entries="thisYear" />
-      <vehicle-avg-consumption-card title="all time avg" :entries="fuelEntries" />
+      <vehicle-value-card
+        :title="`Last Price per ${settings.units.vol.short}`"
+        :value="latestEntry?.price_per_unit ?? 'N/A'"
+        :unit="settings.currency.name"
+        icon="i-hugeicons-droplet"
+        class="top-card"
+      />
+      <vehicle-avg-consumption-card title="year average" :entries="thisYear" /> 
+
+      <vehicle-value-card
+        :title="`avg cost per ${settings.units.dist.short} (${new Date().getUTCFullYear()})`"
+        :value="avgCostPerDistanceYear"
+        :unit="settings.currency.name"
+        icon="i-hugeicons-calendar-03"
+        class="top-card"
+      />
 
       <vehicle-refuel-button-card
         class="card py-10"
@@ -48,6 +62,7 @@ import VehicleValueCard from '@/components/vehicle/cards/VehicleValueCard.vue'
 import FuelTable from '@/components/vehicle/FuelTable.vue'
 import type { FuelEntry } from '@/types'
 import { computed } from 'vue'
+import { useVehicleCalculations } from '@/composables/vehicle'
 
 const router = useRouter()
 
@@ -62,8 +77,10 @@ if (!selectedVehicle.value) {
   router.push({ name: 'vehicle-home', params: { id: selectedVehicle.value.id } })
 }
 
-const fuelEntries = computed<FuelEntry[]>(() => selectedVehicle.value?.expand?.fuel_entries ?? [])
-const sorted = computed(() => fuelEntries.value.sort((a, b) => b.odometer - a.odometer))
+const { sorted, avgCostPerDistanceYear, latestEntry } = useVehicleCalculations(selectedVehicle)
+
+// const fuelEntries = computed<FuelEntry[]>(() => selectedVehicle.value?.expand?.fuel_entries ?? [])
+// const sorted = computed(() => fuelEntries.value.sort((a, b) => b.odometer - a.odometer))
 const lastEntry = computed(() => {
   const avgOnly = sorted.value.filter((e) => e.average)
   if (avgOnly.length > 0) {
@@ -72,7 +89,7 @@ const lastEntry = computed(() => {
   return []
 })
 const thisYear = computed(() =>
-  fuelEntries.value.filter(
+  sorted.value.filter(
     (item) => new Date(item.refueled).getUTCFullYear() === new Date().getUTCFullYear()
   )
 )
@@ -93,6 +110,8 @@ const ownedSince = computed(() => {
       year: 'numeric'
     })
   }
+
+  return "N/A"
 })
 </script>
 

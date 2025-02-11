@@ -22,7 +22,7 @@
     <template v-if="!summary" v-slot:top>
       <div class="ml-auto flex gap-2">
         <q-btn
-        icon="i-hugeicons-calculator"
+        icon="calculate"
         unelevated
         flat
         color="primary"
@@ -31,7 +31,7 @@
         @click="$emit('recompute')"
       />
         <q-btn
-        icon="i-hugeicons-row-insert"
+        icon="add"
         unelevated
         color="primary"
         label="add"
@@ -86,7 +86,7 @@ defineEmits(['toFuelView', 'addEntry', 'toEdit', 'toDetail', 'delete', 'recomput
 
 const pagination = computed(() => {
   return {
-    rowsPerPage: props.summary ? 3 : 10,
+    rowsPerPage: props.summary ? 3 : -1,
     sortBy: 'odometer',
     descending: true
   }

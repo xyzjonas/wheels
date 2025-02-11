@@ -20,7 +20,8 @@ const clickCopy = () => {
     copy(props.value)
     $q.notify({
         type: 'positive',
-        message: 'Text copied'
+        message: 'Text copied',
+        timeout: 1000
     })
 }
 

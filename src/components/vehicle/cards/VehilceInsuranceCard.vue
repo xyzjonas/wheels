@@ -2,7 +2,7 @@
   <card @click="router.push({ name: 'vehicle-maintenance', params: { id: vehicle.id } })">
     <div class="p-2 w-full h-full">
       <div class="flex items-center gap-2 mb-3">
-        <q-icon name="i-hugeicons-edit-01" class="text-xl"></q-icon>
+        <q-icon name="personal_injury" class="text-xl"></q-icon>
         <span class="text-xl uppercase">INSURANCE</span>
       </div>
       <q-table
@@ -28,7 +28,7 @@
         class="mb-10"
       />
       <div class="absolute-bottom-right p-2">
-        <q-btn color="primary" icon="i-hugeicons-document-attachment" label="green card" unelevated></q-btn>
+        <q-btn color="primary" icon="description" label="green card" unelevated></q-btn>
       </div>
     </div>
   </card>

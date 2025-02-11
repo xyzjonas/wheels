@@ -11,7 +11,7 @@
   >
     <template v-slot:top>
       <q-btn
-        icon="i-hugeicons-row-insert"
+        icon="add"
         unelevated
         color="primary"
         label="add"
@@ -45,7 +45,7 @@ defineEmits(['toFuelView', 'addEntry', 'toEdit', 'toDetail', 'delete', 'recomput
 
 const pagination = computed(() => {
   return {
-    rowsPerPage: 10,
+    rowsPerPage: -1,
     sortBy: 'date',
     descending: true
   }
@@ -132,19 +132,19 @@ const fuelColumns = computed<QTableColumn[]>(() => {
 
 const categoryIcons: { [K in Category]: { name: string; color: string } } = {
   maintenance: {
-    name: 'i-hugeicons-wrench-01',
+    name: 'calendar_month',
     color: 'primary'
   },
   service: {
-    name: 'i-hugeicons-settings-error-01',
+    name: 'build',
     color: 'negative'
   },
   tax: {
-    name: 'i-hugeicons-payment-success-01',
+    name: 'payments',
     color: ''
   },
   reminder_check: {
-    name: 'i-hugeicons-checkmark-circle-01',
+    name: 'notifications',
     color: 'positive'
   }
 }

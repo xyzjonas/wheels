@@ -1,11 +1,6 @@
 <template>
-  <main v-if="selectedVehicle" class="p-2 scroll-block max-w-[100%] overflow-hidden">
-    <hero-card title="vehicle upkeep">
-      <div class="text-white text-lg uppercase">{{ selectedVehicle.name }}</div>
-      <div>{{ selectedVehicle.model }}</div>
-    </hero-card>
-
-    <div class="flex w-full gap-2 items-stretch flex-wrap my-3">
+  <main v-if="selectedVehicle" class="my-3">
+    <div class="flex w-full gap-2 items-stretch flex-wrap">
       <vehicle-value-card
         title="paid for Maintenance"
         :value="maintenanceSum"

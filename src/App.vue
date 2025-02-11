@@ -19,8 +19,8 @@
       </template>
     </RouterView>
 
-    <q-page-sticky position="bottom-left" :offset="[8, 8]">
-      <q-btn color="primary" fab-mini @click="toggleRightDrawer" :icon="rightDrawerOpen ? 'close' : 'menu'" />
+    <q-page-sticky position="bottom-left" :offset="[8, 8]" class="z-[10000]">
+      <q-btn color="primary" fab @click="toggleRightDrawer" :icon="rightDrawerOpen ? 'close' : 'menu'" />
     </q-page-sticky>
   </q-layout>
 </template>
@@ -39,7 +39,8 @@ import { useLocalStorage } from '@vueuse/core'
 Notify.setDefaults({
   classes: 'w-full text-md font-bold',
   progress: true,
-  icon: 'chat_bubble'
+  icon: 'chat_bubble',
+  position: 'bottom'
 })
 
 const { fetch } = useVehicles()
@@ -58,20 +59,6 @@ watch(selectedVehicle, (val: Vehicle | undefined) => {
     document.body.style.setProperty('--q-primary', '#5e44ff')
   }
 })
-
-// const routeLabel = computed(() => {
-//   if (currentRoute.value.name === 'vehicle-home') {
-//     return 'home'
-//   }
-
-//   if (currentRoute.value.name === 'vehicle-fuel') {
-//     return 'fuel'
-//   }
-
-//   if (currentRoute.value.name === 'vehicle-maintenance') {
-//     return 'maintenance'
-//   }
-// })
 
 const $q = useQuasar()
 $q.iconMapFn = (iconName) => {
