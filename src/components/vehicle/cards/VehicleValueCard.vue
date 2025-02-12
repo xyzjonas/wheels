@@ -6,7 +6,7 @@
         <div class="self-center text-xl">
           <q-icon :name="icon" class="self-baseline"></q-icon>
         </div>
-        <div class="value self-start text-nowrap">{{ value >= 0 ? round(value, 2).toLocaleString() : 'N/A' }}</div>
+        <div class="value self-start text-nowrap">{{ formattedValue }}</div>
         <span v-if="unit" class="unit uppercase self-center">{{ unit }}</span>
       </div>
     </div>
@@ -17,14 +17,22 @@
 <script setup lang="ts">
 import Card from '@/components/Card.vue'
 import { round } from '@/utils/math';
+import { computed } from 'vue';
 
-defineProps<{
+const props = defineProps<{
   title: string
-  value: number | string
+  value: number | string | number
   icon: string
   unit?: string
   subtitle?: string
 }>()
+
+const formattedValue = computed((): number | string => {
+  if (typeof props.value === "number") {
+    return props.value >= 0 ? round(props.value, 2).toLocaleString() : 'N/A'
+  }
+  return props.value
+})
 </script>
 
 <style lang="css" scoped>
