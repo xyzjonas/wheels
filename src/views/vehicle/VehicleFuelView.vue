@@ -1,11 +1,12 @@
 <template>
   <main v-if="selectedVehicle" class="flex-1 flex flex-col gap-3 my-3">
     <div class="flex gap-2 flex-wrap">
+      <vehicle-avg-consumption-card title="all time avg" :entries="sorted" class="flex-1" />
       <vehicle-value-card
         :title="`Last Price per ${settings.units.vol.short}`"
         :value="latestEntry?.price_per_unit ?? 'N/A'"
         :unit="settings.currency.name"
-        icon="water_drop"
+        icon="sell"
         class="top-card"
       />
       <vehicle-value-card
@@ -22,7 +23,6 @@
         icon="sell"
         class="top-card"
       />
-      <vehicle-avg-consumption-card title="all time avg" :entries="sorted" class="flex-1" />
     </div>
 
     <fuel-table

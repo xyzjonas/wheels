@@ -14,7 +14,7 @@
         :title="`Last Price per ${settings.units.vol.short}`"
         :value="latestEntry?.price_per_unit ?? 'N/A'"
         :unit="settings.currency.name"
-        icon="i-hugeicons-droplet"
+        icon="sell"
         class="top-card"
       />
       <vehicle-avg-consumption-card title="year average" :entries="thisYear" />
@@ -23,7 +23,7 @@
         :title="`avg cost per ${settings.units.dist.short} (${new Date().getUTCFullYear()})`"
         :value="avgCostPerDistanceYear"
         :unit="settings.currency.name"
-        icon="i-hugeicons-calendar-03"
+        icon="sell"
         class="top-card"
       />
 

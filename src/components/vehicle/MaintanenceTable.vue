@@ -3,21 +3,28 @@
     title="Maintenance History"
     flat
     no-data-label="No maintenance history found"
-    :rows="entries"
+    :rows="displayedEntries"
     :pagination="pagination"
     :columns="fuelColumns"
     @row-click="(evt, row) => $emit('toDetail', row.id)"
     row-key="name"
   >
     <template v-slot:top>
-      <q-btn
-        icon="add"
-        unelevated
-        color="primary"
-        label="add"
-        class="ml-auto"
-        @click="$emit('addEntry')"
-      />
+      <div class="w-full flex items-center justify-between">
+        <q-input outlined dense v-model="filter" placeholder="Search">
+          <template v-slot:append>
+            <q-icon name="search" />
+          </template>
+        </q-input>
+        <q-btn
+          icon="add"
+          unelevated
+          color="primary"
+          label="add"
+          class="ml-auto"
+          @click="$emit('addEntry')"
+        />
+      </div>
     </template>
     <template v-slot:body-cell-category="props">
       <q-td auto-width>
@@ -32,10 +39,11 @@
 </template>
 
 <script setup lang="ts">
+import { useFzfSearch } from '@/composables/search';
 import { useVehicles } from '@/composables/vehicles'
 import type { Category, MaintenanceEntry } from '@/types'
 import { useQuasar, type QTableColumn } from 'quasar'
-import { computed } from 'vue'
+import { computed, ref, watch } from 'vue'
 
 const props = defineProps<{
   entries: MaintenanceEntry[]
@@ -148,6 +156,18 @@ const categoryIcons: { [K in Category]: { name: string; color: string } } = {
     color: 'positive'
   }
 }
+
+const displayedEntries = ref(props.entries)
+const { search } = useFzfSearch()
+const filter = ref("")
+const executeFilter = () => {
+  if (!filter.value) {
+    displayedEntries.value = props.entries
+  } else {
+    displayedEntries.value = search(filter.value, props.entries)
+  }
+}
+watch(filter, executeFilter)
 </script>
 
 <style lang="scss" scoped></style>

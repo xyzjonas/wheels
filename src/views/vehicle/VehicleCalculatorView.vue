@@ -50,7 +50,9 @@ const {
   avgCostPerDistanceYear,
   latestEntry,
   avgAmortization,
-  avgAmortizationWithRepairs
+  avgAmortizationWithRepairs,
+  yearAvg,
+  allTimeAvg,
 } = useVehicleCalculations(selectedVehicle)
 
 type Option = { label: string; value: number }
@@ -62,11 +64,11 @@ const consumptionOptions = computed<Option[]>(() => [
   },
   {
     label: `All Time Average (${avgCostPerDistance.value})`,
-    value: avgCostPerDistance.value
+    value: allTimeAvg.value
   },
   {
     label: `This Year Average ${avgCostPerDistanceYear.value}`,
-    value: avgCostPerDistanceYear.value
+    value: yearAvg.value
   }
 ])
 

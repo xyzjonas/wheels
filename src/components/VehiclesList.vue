@@ -28,7 +28,7 @@
     <template v-slot:top-right>
       <q-input outlined dense debounce="300" v-model="filter" placeholder="Search">
         <template v-slot:append>
-          <q-icon name="i-hugeicons-search-02" />
+          <q-icon name="search" />
         </template>
       </q-input>
     </template>
