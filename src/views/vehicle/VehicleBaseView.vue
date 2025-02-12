@@ -2,17 +2,17 @@
   <q-page v-if="selectedVehicle" padding>
     <HeroCard :title="title ?? selectedVehicle.name">
       <div class="text-white text-lg mb-5 font-500">{{ selectedVehicle.model }}</div>
-      <div class="flex justify-between">
-        <div>
-          <div class="text-xs text-secondary">VIN</div>
-          <div class="text-white flex items-center gap-2 uppercase">
+      <div class="flex flex-col min-[400px]:flex-row min-[400px]:justify-between items-end gap-3">
+        <div class="flex flex-col max-[400px]:items-end">
+          <span class="text-xs text-secondary">VIN</span>
+          <div class="text-white flex items-center gap-2 uppercase max-[400px]:flex-row-reverse">
             <span class="text-xs">{{ selectedVehicle.vin }}</span>
             <CopyButton :value="selectedVehicle.vin" />
           </div>
         </div>
-        <div>
+        <div class="flex flex-col max-[400px]:items-end">
           Registration Number
-          <div class="text-white flex items-center justify-end gap-2 uppercase">
+          <div class="text-white flex items-center justify-end gap-2 uppercase max-[400px]:flex-row-reverse">
             {{ selectedVehicle.registration }}
             <CopyButton :value="selectedVehicle.registration" />
           </div>

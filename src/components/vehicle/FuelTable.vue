@@ -42,25 +42,25 @@
     </template>
     <template v-slot:body-cell-menu="props">
       <q-td auto-width>
-        <q-btn dense flat icon="i-hugeicons-more-vertical">
+        <q-btn dense flat icon="more_vert">
           <q-menu v-model="props.row.showMenu">
             <q-list>
               <q-item clickable v-close-popup @click="props.row.showMenu = false; $emit('toDetail', props.row.id)">
-                <q-item-section class="flex flex-row gap-3 items-center justify-start no-wrap">
-                  <q-icon name="i-hugeicons-view" />
+                <q-item-section class="flex flex-row gap-3 items-center justify-between no-wrap">
                   Detail
+                  <q-icon name="description" size="1rem" />
                 </q-item-section>
               </q-item>
               <q-item clickable v-close-popup @click="props.row.showMenu = false; $emit('toEdit', props.row.id)">
-                <q-item-section class="flex flex-row gap-3 items-center justify-start no-wrap">
-                  <q-icon name="i-hugeicons-edit-02" />
+                <q-item-section class="flex flex-row gap-3 items-center justify-between no-wrap">
                   Edit
+                  <q-icon name="edit" size="1rem" />
                 </q-item-section>
               </q-item>
-              <q-item clickable v-close-popup class="w-fit text-negative" @click="props.row.showMenu = false; $emit('delete', props.row.id)">
-                <q-item-section class="flex flex-row gap-3 items-center justify-start no-wrap">
-                  <q-icon name="i-hugeicons-delete-02" />
+              <q-item clickable v-close-popup class="text-negative" @click="props.row.showMenu = false; $emit('delete', props.row.id)">
+                <q-item-section class="flex flex-row gap-3 items-center justify-between no-wrap">
                   Delete
+                  <q-icon name="delete" size="1rem" />
                 </q-item-section>
               </q-item>
             </q-list>

@@ -1,7 +1,7 @@
 <template>
-  <main v-if="refuelItem" class="p-2 flex-1 flex flex-col">
-    <refuel-form v-model="refuelItem" readonly @toEdit="toEditView" @cancel="goBack"/>
-  </main>
+  <q-page v-if="refuelItem" padding class="flex flex-col">
+    <refuel-form v-model="refuelItem" readonly @toEdit="toEditView" @cancel="goBack" />
+  </q-page>
 </template>
 
 <script setup lang="ts">
@@ -42,7 +42,6 @@ const toEditView = (refuelItemId: string) => {
     params: { id: selectedVehicleId.value, refuelId: refuelItemId }
   })
 }
-
 </script>
 
 <style lang="scss" scoped></style>

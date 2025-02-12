@@ -17,18 +17,48 @@ export const useVehicleCalculations = (vehicle: Ref<Vehicle | undefined>) => {
       sorted.value.filter((entry) => new Date(entry.refueled).getUTCFullYear() === thisYear)
     )
   })
-  
-    const avgAmortization = computed(() => {
-        const driven = latestEntry.value.odometer - (vehicle.value?.purchased_odometer ?? 0)
-        const total = (vehicle.value?.expand?.maintenance_entries ?? []).reduce((a, b) => a + b.price, 0)
-        return total / driven
-    })
+
+  const avgAmortizationWithRepairs = computed(() => {
+    const driven = latestEntry.value.odometer - (vehicle.value?.purchased_odometer ?? 0)
+    const total = (vehicle.value?.expand?.maintenance_entries ?? []).reduce(
+      (a, b) => a + b.price,
+      0
+    )
+    return total / driven
+  })
+
+  const avgAmortization = computed(() => {
+    const driven = latestEntry.value.odometer - (vehicle.value?.purchased_odometer ?? 0)
+    const total = (vehicle.value?.expand?.maintenance_entries ?? [])
+      .filter((entry) => entry.category !== 'service')
+      .reduce((a, b) => a + b.price, 0)
+    return total / driven
+  })
+
+  const ownedSince = computed(() => {
+    if (vehicle.value?.purchased) {
+      return new Date(vehicle.value.purchased).toLocaleDateString('en-US', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric'
+      })
+    }
+
+    return 'N/A'
+  })
+
+  const drivenTotal = computed(() => {
+    return latestEntry.value.odometer - (vehicle.value?.purchased_odometer ?? 0)
+  })
 
   return {
     sorted,
     latestEntry,
     avgCostPerDistance,
     avgCostPerDistanceYear,
-    avgAmortization
+    avgAmortization,
+    avgAmortizationWithRepairs,
+    ownedSince,
+    drivenTotal
   }
 }

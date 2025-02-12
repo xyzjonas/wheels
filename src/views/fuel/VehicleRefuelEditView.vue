@@ -1,12 +1,12 @@
 <template>
-  <main v-if="fuelEntry" class="p-2 flex-1 flex flex-col">
+  <q-page v-if="fuelEntry" class="flex flex-col" padding>
     <refuel-form
       v-if="fuelEntry"
       v-model="fuelEntry"
       @submit="submit"
-      @cancel="goBack"
+      @cancel="toDetailView"
     ></refuel-form>
-  </main>
+  </q-page>
 </template>
 
 <script setup lang="ts">
@@ -37,11 +37,17 @@ try {
   if (fuelEntry.value) {
     fuelEntry.value.refueled = date.formatDate(fuelEntry.value.refueled, 'YYYY/MM/DD')
   }
-} catch {}
+} catch(err) {
+  console.error(err)
+}
 
+const { selectedVehicleId } = useVehicles()
 
-const goBack = () => {
-  router.push({ name: 'vehicle-fuel', params: { id: vehicleId.value } })
+const toDetailView = () => {
+  router.push({
+    name: 'vehicle-fuel-detail',
+    params: { id: selectedVehicleId.value, refuelId: fuelEntry.value?.id }
+  })
 }
 
 const submit = async (entry: any) => {

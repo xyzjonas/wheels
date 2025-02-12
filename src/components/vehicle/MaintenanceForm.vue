@@ -26,9 +26,10 @@
       label="Description *"
       hint="Short description of the maintenance entry"
       :readonly="readonly"
+      :rules="[mustBeNonEmpty]"
     >
       <template v-slot:prepend>
-        <q-icon name="i-hugeicons-text-align-left" />
+        <q-icon name="edit_note" />
       </template>
     </q-input>
 
@@ -55,7 +56,7 @@
       :readonly="readonly"
     >
       <template v-slot:prepend>
-        <q-icon name="i-hugeicons-summation-01" />
+        <q-icon name="sell" />
       </template>
     </q-input>
 
@@ -83,7 +84,7 @@
         class="flex-1"
         @click="$emit('toEdit')"
       />
-      <q-btn @click="$emit('cancel')" label="cancel" color="primary" outline class="flex-1 h-[4rem]" />
+      <q-btn @click="$emit('cancel')" :label="readonly ? 'go back' : 'cancel'" color="primary" outline class="flex-1 h-[4rem]" />
     </div>
   </q-form>
 </template>
@@ -95,6 +96,7 @@ import { date } from 'quasar'
 import { computed, onMounted } from 'vue'
 
 import Separator from '@/components/Separator.vue'
+import { mustBeNonEmpty } from '@/utils/validationRules'
 
 const { settings } = useVehicles()
 const model = defineModel<CreateMaintenanceEntry>({ required: true })
@@ -109,19 +111,6 @@ const odoHint = computed(() => {
 })
 
 defineEmits(['submit', 'cancel', 'toEdit', 'toDetail'])
-
-const mustBeNonZero = (val: string | number | null) => {
-  if (isNaN(parseFloat(`${val}`))) {
-    return 'Must be a number.'
-  }
-
-  const num = parseFloat(`${val}`)
-  if (num <= 0) {
-    return 'Must be greater than zero.'
-  }
-
-  return true
-}
 
 onMounted(() => {
   model.value.date = date.formatDate(model.value.date, 'YYYY/MM/DD')

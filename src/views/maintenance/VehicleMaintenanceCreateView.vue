@@ -1,7 +1,7 @@
 <template>
-  <main class="p-2 flex-1 flex flex-col">
+  <q-page class="flex flex-col" padding>
     <maintenance-form v-model="newEntry" :last-odometer="lastOdo" @submit="submit" @cancel="goBack" />
-  </main>
+  </q-page>
 </template>
 
 <script setup lang="ts">

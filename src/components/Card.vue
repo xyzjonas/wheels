@@ -1,5 +1,5 @@
 <template>
-  <q-card flat bordered class="card dark:border-transparent">
+  <q-card flat bordered class="dark:border-transparent">
     <slot></slot>
   </q-card>
 </template>

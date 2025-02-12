@@ -11,7 +11,7 @@
 import { computed } from 'vue'
 
 import { useVehicles } from '@/composables/vehicles'
-import type { FuelEntry, Vehicle } from '@/types'
+import type { FuelEntry } from '@/types'
 
 import { round } from '@/utils/math'
 import VehicleValueCard from './VehicleValueCard.vue'

@@ -1,28 +1,28 @@
 <template>
-  <main v-if="selectedVehicle" class="flex-1 flex flex-col my-3">
-    <div class="flex w-full gap-2 items-stretch flex-wrap mb-3">
+  <main v-if="selectedVehicle" class="flex-1 flex flex-col gap-3 my-3">
+    <div class="flex gap-2 flex-wrap">
       <vehicle-value-card
         :title="`Last Price per ${settings.units.vol.short}`"
         :value="latestEntry?.price_per_unit ?? 'N/A'"
         :unit="settings.currency.name"
-        icon="i-hugeicons-droplet"
+        icon="water_drop"
         class="top-card"
       />
       <vehicle-value-card
         :title="`avg cost per ${settings.units.dist.short}`"
         :value="avgCostPerDistance"
         :unit="settings.currency.name"
-        icon="i-hugeicons-coins-dollar"
+        icon="sell"
         class="top-card"
       />
       <vehicle-value-card
         :title="`avg cost per ${settings.units.dist.short} (${new Date().getUTCFullYear()})`"
         :value="avgCostPerDistanceYear"
         :unit="settings.currency.name"
-        icon="i-hugeicons-calendar-03"
+        icon="sell"
         class="top-card"
       />
-      <vehicle-avg-consumption-card title="all time avg" :entries="sorted" />
+      <vehicle-avg-consumption-card title="all time avg" :entries="sorted" class="flex-1" />
     </div>
 
     <fuel-table
@@ -35,19 +35,18 @@
     />
 
     <q-dialog v-model="showDeleteDialog" position="bottom">
-      <q-card class="min-w-xs flex flex-col">
+      <q-card class="min-w-sm flex flex-col">
         <q-card-section class="row items-center no-wrap pb-2">
           <div>
             <div class="text-weight-bold text-lg">Are you sure?</div>
             <div class="text-grey">Deleted entry will be lost forever.</div>
           </div>
         </q-card-section>
-        <q-card-section class="flex gap-2 h-fit">
+        <q-card-section class="flex gap-2">
           <q-btn
             outline
             dense
             :loading="deleteLoading"
-            icon="i-hugeicons-delete-02"
             label="delete"
             color="negative"
             class="flex-1"
@@ -181,53 +180,11 @@ async function recompute() {
     setTimeout(() => (recomputing.value = false), 300)
   }
 }
-
-// const calculateAverageCostPerDistance = (data: FuelEntry[]) => {
-//   let result = 0
-
-//   if (data.length <= 0) {
-//     return 'N/A'
-//   }
-
-//   data.reduce((prev: FuelEntry, current: FuelEntry) => {
-
-//     if (current.reset) {
-//       return current
-//     }
-
-//     const distanceDriven = current.odometer - prev.odometer
-//     const price = current.price / distanceDriven
-//     if (result === 0) {
-//       result = price
-//     } else {
-//       result = (result + price) / 2
-//     }
-
-//     return current
-//   })
-
-//   if (result === 0) {
-//     return 'N/A'
-//   }
-
-//   return round(result, 2)
-// }
-
-// const avgCostPerDistance = computed(() => {
-//   return calculateAverageCostPerDistance(sorted.value)
-// })
-
-// const avgCostPerDistanceYear = computed(() => {
-//   const thisYear = new Date().getUTCFullYear()
-//   return calculateAverageCostPerDistance(
-//     sorted.value.filter((entry) => new Date(entry.refueled).getUTCFullYear() === thisYear)
-//   )
-// })
 </script>
 
 <style lang="css" scoped>
 .top-card {
   flex: 1;
-  min-width: 10rem; /** enough space for 2 decimal precision */
+  /* min-width: fit-content; */
 }
 </style>

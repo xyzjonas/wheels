@@ -1,5 +1,5 @@
 <template>
-  <main v-if="selectedVehicle" class="my-3">
+  <main v-if="selectedVehicle" class="my-3 flex flex-col gap-3">
     <div class="flex w-full gap-2 items-stretch flex-wrap">
       <vehicle-value-card
         title="paid for Maintenance"

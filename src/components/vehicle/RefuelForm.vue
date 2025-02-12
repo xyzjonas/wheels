@@ -86,10 +86,30 @@
     <q-toggle :disable="readonly" v-model="model.full_tank" label="Full Tank" />
     <q-toggle :disable="readonly" v-model="model.reset" label="Reset" />
 
-    <div class="flex gap-2 mt-auto pt-5">
-      <q-btn v-if="!readonly" unelevated label="Submit" type="submit" color="primary" class="flex-1" />
-      <q-btn v-else unelevated label="Edit" color="primary" class="flex-1" @click="$emit('toEdit')" />
-      <q-btn @click="$emit('cancel')" label="go back" color="primary" outline class="flex-1" />
+    <div class="flex gap-2 mt-auto pt-5 h-[5rem]">
+      <q-btn
+        v-if="!readonly"
+        unelevated
+        label="Submit"
+        type="submit"
+        color="primary"
+        class="flex-1"
+      />
+      <q-btn
+        v-else
+        unelevated
+        label="Edit"
+        color="primary"
+        class="flex-1"
+        @click="$emit('toEdit')"
+      />
+      <q-btn
+        @click="$emit('cancel')"
+        :label="readonly ? 'go back' : 'cancel'"
+        color="primary"
+        outline
+        class="flex-1"
+      />
     </div>
   </q-form>
 </template>
@@ -100,6 +120,7 @@ import { useVehicles } from '@/composables/vehicles'
 import type { FuelEntry } from '@/types'
 import { computed, onMounted } from 'vue'
 import { date } from 'quasar'
+import { mustBeNonZero } from '@/utils/validationRules'
 
 const { settings } = useVehicles()
 const model = defineModel<Partial<FuelEntry>>({ required: true })
@@ -141,19 +162,6 @@ const amountChanged = (value: string | number | null) => {
   if (model.value.price_per_unit) {
     model.value.price = round(model.value.price_per_unit * model.value.amount, 2)
   }
-}
-
-const mustBeNonZero = (val: string | number | null) => {
-  if (isNaN(parseFloat(`${val}`))) {
-    return 'Must be a number.'
-  }
-
-  const num = parseFloat(`${val}`)
-  if (num <= 0) {
-    return 'Must be greater than zero.'
-  }
-
-  return true
 }
 
 onMounted(() => {
